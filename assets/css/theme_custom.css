@@ -1,0 +1,17 @@
+
+
+.cover-main img{
+        color:rgb(50,200,200);
+        border-radius: 50%;
+}
+
+strong {
+    font-weight: bold;
+    color: #4a4b51;
+}
+::selection {
+    background: rgba(0,149,255,0.2);
+    border-radius: 5px;
+	color:#fff;
+}
+
