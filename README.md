@@ -8,9 +8,9 @@ by 陌花采撷
 
 
 
-### [leetcode训练专题](./documents/Page2.md)
+### [leetcode训练专题](/documents/Page2.md)
 
-### [剑指offer训练专题](./documents/Page3.md)
+### [剑指offer训练专题](/documents/Page3.md)
 
 
 
