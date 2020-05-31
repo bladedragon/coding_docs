@@ -1,5 +1,9 @@
 # LeetCode解题心得
 
+
+
+
+
 ### 1、两数之和
 
 
@@ -787,143 +791,59 @@ class Solution {
 
 ## 数组
 
-### 300.最长上升子序列
-
-给定一个无序的整数数组，找到其中最长上升子序列的长度。
-
-**示例:**
-
-```
-输入: [10,9,2,5,3,7,101,18]
-输出: 4 
-解释: 最长的上升子序列是 [2,3,7,101]，它的长度是 4。
-```
-
-**说明:**
-
-- 可能会有多种最长上升子序列的组合，你只需要输出对应的长度即可。
-- 你算法的时间复杂度应该为 O(*n2*) 。
-
-**进阶:** 你能将算法的时间复杂度降低到 O(*n* log *n*) 吗?
-
-
-
-**答案**
-
-**动态规划**
-
-使用一个最大值数组保存每次遍历的最大值，
-
-动态规划每次使用上一次的最大值和现在进行比较，如果满足条件，那就在原来基础上递增
-
-步骤
-
-1. **定义状态**  `dp[i]` 表示**以 `nums[i]` 结尾**的「上升子序列」的长度
-
-2. **考虑状态转移方程**   
-
-   <img src="../../../ZZZ_files/学习/算法/Leetcode题解心得/image-20200427103029475.png" alt="image-20200427103029475" style="zoom: 80%;" />
-
-3. **考虑初始化**  `dp[i] = 1`，11 个字符显然是长度为 11 的上升子序列。
-
-4. **考虑输出**  最后一个状态值只是以 `nums[len - 1]` 结尾的「上升子序列」的长度，`dp`的最大值才是最后的输出值
-
-5. **考虑状态压缩**
-
-```java
-public class Solution {
-    public int lengthOfLIS(int[] nums) {
-        if (nums.length == 0) {
-            return 0;
-        }
-        int[] dp = new int[nums.length];
-        dp[0] = 1;
-        int maxans = 1;
-        //注意i从1开始
-        for (int i = 1; i < dp.length; i++) {
-            int maxval = 0;
-            for (int j = 0; j < i; j++) {
-                if (nums[i] > nums[j]) {
-                    maxval = Math.max(maxval, dp[j]);
-                }
-            }
-            dp[i] = maxval + 1;
-            maxans = Math.max(maxans, dp[i]);
-        }
-        return maxans;
-    }
-}
-```
-
-
-
-**贪心+二分**
-
-> 考虑一个简单的贪心，如果我们要使上升子序列尽可能的长，则我们需要让序列上升得尽可能慢，因此我们希望每次在上升子序列最后加上的那个数尽可能的小。
-
-+ 二分主要是为了找到第一个大于nums[i]的数，前提是tail数组是一个递增的数组
-+ 贪心是
-
-**状态定义**：
-
-+ `tails[k]` 的值代表 长度为 `k+1` 子序列 的尾部元素值。
-
-**转移方程**： 设 `res `为 `tails` 当前长度，代表直到当前的最长上升子序列长度。设 j∈[0,res)，考虑每轮遍历 `nums[k]` 时，通过二分法遍历` [0,res)` 列表区间，找出 `nums[k]` 的大小分界点，会出现两种情况：
-
-+ 区间中存在 `tails[i] > nums[k]`： 将第一个满足 `tails[i] > nums[k]`执行` tails[i] = nums[k]`；因为更小的 nums[k]后更可能接一个比它大的数字（前面分析过）。
-+ 区间中不存在 `tails[i] > nums[k]` ： 意味着 `nums[k] `可以接在前面所有长度的子序列之后，因此肯定是接到最长的后面（长度为 `res `），新子序列长度为` res + 1`。
-
-**初始状态**：
-
-+ 令 `tails `列表所有值 `=0`。·
-
-**返回值**：
-
-+ 返回 res ，即最长上升子子序列长度。
-
-
-
-> 自我解读
->
-> 只要比尾部大说明可以继续成为连续数组，二分的作用就是遍历数组看是不是这个数比尾部都大
->
-> 
-
-```java
-class Solution {
-    public int lengthOfLIS(int[] nums) {
-        int[] tails = new int[nums.length];
-        int res = 0;
-        for(int num : nums) {
-            int i = 0, j = res;
-            while(i < j) {
-                int m = (i + j) / 2;
-                if(tails[m] < num) i = m + 1;
-                else j = m;
-            }
-            //尾部数组插入值，可能是新值也可能更新
-            tails[i] = num;
-            //如果res==j说明长度变长了
-            if(res == j) res++;
-        }
-        return res;
-    }
-}
-```
-
-
-
 ### 35、插入元素的位置
 
+给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+
+你可以假设数组中无重复元素。
+
+**示例 1:**
+
+```
+输入: [1,3,5,6], 5
+输出: 2
+```
 
 
 
+**解析**
 
-
+[二分查找问题解答！！重要](https://leetcode-cn.com/problems/search-insert-position/solution/te-bie-hao-yong-de-er-fen-cha-fa-fa-mo-ban-python-/)
 
 **答案**
 
+```java
+public int searchInsert2(int[] nums, int target) {
+            int len = nums.length;
+            if (len == 0) {
+                return 0;
+            }
+
+            int left = 0;
+            // 因为有可能数组的最后一个元素的位置的下一个是我们要找的，故右边界是 len
+            int right = len;
+
+            while (left < right) {
+                int mid = (left + right) >>> 1;
+                // 小于 target 的元素一定不是解
+                if (nums[mid] < target) {
+                    // 下一轮搜索的区间是 [mid + 1, right]
+                    left = mid + 1;
+                } else {
+                    right = mid;
+                }
+            }
+            return left;
+        }
+```
+
+![image.png](https://pic.leetcode-cn.com/e120bac189db2fc912dce550d9c46746a312f362ee3d6d40e799aad8db69ae6f-image.png)
+
+
+
 #### 二分查找法的应用
+
+
 
 ### 200、岛屿数量
 
@@ -1301,6 +1221,128 @@ public int maxArea(int[] height){
 
 
 
+### 26、删除排序数组的重复项
+
+给定一个排序数组，你需要在 原地 删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
+
+不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+
+```java
+给定数组 nums = [1,1,2], 
+
+函数应该返回新的长度 2, 并且原数组 nums 的前两个元素被修改为 1, 2。 
+
+你不需要考虑数组中超出新长度后面的元素。
+```
+
+
+
+
+
+**解析**
+
+一开始面对递增数组重复，考虑使用二分查找，<mark>但是二分的思适合用于查重，可以查找到重复的数字，但是去重仍然比较麻烦，对每个数字进行查重时间复杂度也比较高</mark>，因此，这里选择使用双指针法判断并去重。
+
+**答案**
+
++ 比较` p` 和 `q` 位置的元素是否相等。
++ 如果相等，`q` 后移 `1` 位
++ 如果不相等，将 `q` 位置的元素复制到 `p+1 `位置上，`p `后移一位，`q `后移 `1 `位
+  重复上述过程，直到 `q` 等于数组长度。
++ 返回 `p + 1`，即为新数组长度。
+
+
+
+```java
+ public int removeDuplicates(int[] nums) {
+    if(nums == null || nums.length == 0) return 0;
+     //q这里直接可以从1开始
+    int p = 0;
+    int q = 1;
+     //q会超过p吗？不会，因为p==q的时候p一定会递增
+    while(q < nums.length){
+        if(nums[p] != nums[q]){
+            nums[p + 1] = nums[q];
+            p++;
+        }
+        q++;
+    }
+    return p + 1;
+}
+```
+
+**优化思路**
+
+如果数组无重复数字，那么赋值就是无意义的。因此判断p，q之间的距离，出现重复再赋值
+
+
+
+```java
+public int removeDuplicates(int[] nums) {
+    if(nums == null || nums.length == 0) return 0;
+    int p = 0;
+    int q = 1;
+    while(q < nums.length){
+        if(nums[p] != nums[q]){
+            if(q - p > 1){
+                nums[p + 1] = nums[q];
+            }
+            p++;
+        }
+        q++;
+    }
+    return p + 1;
+}
+```
+
+
+
+### 27、移除元素
+
+给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。
+
+不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。
+
+元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。
+
+
+
+```java
+给定 nums = [3,2,2,3], val = 3,
+
+函数应该返回新的长度 2, 并且 nums 中的前两个元素均为 2。
+
+你不需要考虑数组中超出新长度后面的元素。
+```
+
+
+
+**解析**
+
+依然使用双指针的方法做
+
+这里就是简单的完全覆盖
+
+
+
+**答案**
+
+```java
+public int removeElement(int[] nums, int val) {
+    int i = 0
+     
+    for (int j = 0; j < nums.length; j++) {
+        if (nums[j] != val) {
+            nums[i] = nums[j];
+            i++;
+        }
+    }
+    return i;
+}
+```
+
+
+
 
 
 ## 字符串
@@ -1412,7 +1454,7 @@ public String longestCommonPrefix(String[] strs) {
 
 + **判断二分前面部分是不是前缀，如果是，就查后面部分，如果不是就查前面部分**
 
-![image-20200406104859022](Page2/image-20200406104859022.png)
+![image-20200406104859022](Page2/image-20200406104859022-1590906921756.png)
 
 ```java
 public String longestCommonPrefix(String[] strs) {
@@ -2144,7 +2186,124 @@ public ListNode swapPairs(ListNode head) {
 
 
 
+### 28、实现strStr()
 
+给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。
+
+给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。
+
+```java
+输入: haystack = "hello", needle = "ll"
+输出: 2
+```
+
+**解析**
+
+这属于字符串匹配问题，可以想到KMP算法
+
+
+
+**答案**
+
+双指针法
+
++ 匹配首字符，匹配成功字符后移
++ 匹配失败，字符回溯
+
+```java
+    public int strStr(String haystack ,String needle){
+        int pL = 0;
+        int pN = 0;
+        int L = haystack.length();
+        int N = needle.length();
+
+        if(N ==  0){
+            return 0;
+        }
+        while(pL < L-N +1){
+                while(pL < L-N +1&&haystack.charAt(pL) != needle.charAt(pN)){
+                    pL++;
+                }
+
+                while(pL < L && pN < N && haystack.charAt(pL) == needle.charAt(pN)){
+                    pL++;
+                    pN++;
+                    if(pN == N){
+                        return pL-pN;
+                    }
+                }
+                pL = pL-pN+1;
+                pN = 0;
+        }
+        return -1;
+    }
+```
+
+RK算法
+
+算法核心：计算滚动哈希值，将待匹配的字符串的哈希值和主串进行比较
+
++ 滚动哈希的算法
+
+  哈希的算法和上一个字符串有关，因此来降低算法的是时间复杂度
+
+  计算公式：
+
+  ![image-20200531105130272](Page2/image-20200531105130272.png)
+
+  
+
++ 主串从0开始遍历到(Len-N)，计算哈希值和匹配串比较
+
+```java
+    public int strStrRK(String haystack,String needle){
+        int L = haystack.length();
+        int N = needle.length();
+
+        if (L < N) {
+            return -1;
+        }
+        int a = 26
+         //防止溢出
+        long module = (long) Math.pow(2,31);
+
+        long h  =0;
+        long ref_h = 0;
+
+        //计算最初的字符串
+        for(int i=0;i<N;i++){
+            h = (a*h + charToInt(i,haystack)) % module;
+            ref_h =  (ref_h*a + charToInt(i,needle))% module;
+        }
+        if( h == ref_h){
+            return 0;
+        }
+        //这是之后要使用的常量
+        long aN = 1;
+        for(int i =1;i<=N;i++){
+            aN = (aN *a) % module;
+        }
+		//移动字符串，减掉移出的，添加新增的
+        for(int start =1;start<L-N+1;start++){
+            h = (h * a - charToInt(start - 1, haystack) * aN
+                    + charToInt(start + N - 1, haystack)) % module;
+            if (h == ref_h){
+                return start;
+            }
+        }
+        return -1;
+    }
+
+    public int charToInt(int idx,String s){
+        return (int)s.charAt(idx)-'a';
+    }
+```
+
+
+
+KMP算法
+
++ 不打算手写，但是要掌握思想
 
 ## 数字
 
@@ -2512,6 +2671,132 @@ public List<List<Integer>> fourSum(int[] nums,int target){
 
 
 
+### 29、两数相除
+
+给定两个整数，被除数 `dividend` 和除数 `divisor`。将两数相除，要求不使用乘法、除法和 `mod` 运算符。
+
+返回被除数 `dividend` 除以除数 `divisor` 得到的商。
+
+整数除法的结果应当截去（`truncate`）其小数部分，例如：`truncate(8.345) = 8 `以及` truncate(-2.7335) = -2`
+
+```java
+输入: dividend = 10, divisor = 3
+输出: 3
+解释: 10/3 = truncate(3.33333..) = truncate(3) = 3
+
+```
+
+
+
+**解析**
+
+关注两方面
+
++ 大数的边界条件，注意处理，`MIN_VALUE/-1会`溢出·
++ 位运算逼近求的余数
++ 注意如果题目没有要求要用long来确保不会溢出
++ 注意总结位运算的常用技巧,比如`A^B<0`得到两数是否异号·
+
+**答案**
+
+1.位运算逼近法
+
+我们可以以`100/3`为例
+
+`2^n`是`1，2，4，8...2^31`这种数，当n为`31`时，这个数特别大，`100/2^n`是一个很小的数，肯定是小于`3`的
+
+所以循环下来，当`n=5`时，`100/32=3`, 刚好是大于等于3的，这时我们将`100-32*3=4`，也就是减去了`32`个`3`，接下来我们再处理`4`，同样手法可以再减去一个`3`
+
+ 所以一共是减去了`33`个`3`，所以商就是``33`
+
+
+```java
+    public int divide_bit(int dividend, int divisor) {
+        //被除数为0，余数为0
+        if (dividend == 0) {
+            return 0;
+        }
+        //int类型最小数为-2147483648，除以-1得到最大值应该为2147483648,正常逻辑的话会溢出，所以特殊处理
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            //2147483647
+            return Integer.MAX_VALUE;
+        }
+        boolean negative;
+        //用异或来计算是否符号相异
+        negative = (dividend ^ divisor) <0;
+        long t = Math.abs((long) dividend);
+        long d= Math.abs((long) divisor);
+        int result = 0;
+        for (int i=31; i>=0;i--) {
+            //其实就是从i=0开始逼近，找出足够大的数2^n*divisor
+            if ((t>>i)>=d) {
+                //注意结果加上2^n
+                result+=1<<i;
+                //t减小后继续从i=0开始逼近，找出足够大的数，这个数一定不会大于上一轮的数
+                t-=d<<i;
+            }
+        }
+        //符号相异取反
+        return negative ? -result : result;
+    }
+```
+
+
+
+2.常规思路加减法
+
+核心逻辑和位运算是一样的，只是使用了递归的方法
+
+注意使用`long`防止`MIN_VALUE`转正的时候的溢出·
+
+```java
+    public int divide(int dividend,int divisor){
+        if(dividend == 0){
+            return 0;
+        }
+        if(divisor ==1){
+            return dividend;
+        }
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE;
+        }
+        if(divisor == -1){
+            if(dividend>Integer.MIN_VALUE) {
+                return -dividend;
+            }
+            return Integer.MIN_VALUE;
+        }
+        int signed = -1;
+        if((dividend>0 && divisor >0) || (dividend < 0 && divisor < 0)){
+            signed = 1;
+        }
+        //使用long强制转型
+        long a = (long)dividend > 0? (long) dividend : -(long)dividend;
+        long b =(long) divisor >0 ? (long)divisor:-(long) divisor;
+        
+        long result = div(a,b);
+        System.out.println("result:"+result);
+        return (int) (signed ==1? result :-result);
+    }
+
+//核心逻辑
+    public long div(long a ,long b){
+        if(a <b){
+            return 0;
+        }
+
+        long count = 1;
+        long tb = b;
+        //不断扩大逼近，同时记录除数
+        while(tb+tb <= a){
+            tb = tb +tb;
+            count= count + count;
+        }
+        //递归调用
+        return count+div((int) (a-tb),b);
+    }
+```
+
 
 
 ## 动态规划专题
@@ -2535,6 +2820,1296 @@ public List<List<Integer>> fourSum(int[] nums,int target){
 + 思考输出
 
 + 思考状态压缩
+
+
+
+## 二分查找专题
+
+1. 在数组中查找符合条件的元素的索引
+2. 在一个有上下界的区间里搜索一个整数
+3. 判别条件是一个函数
+
+![image.png](https://pic.leetcode-cn.com/e120bac189db2fc912dce550d9c46746a312f362ee3d6d40e799aad8db69ae6f-image.png)
+
+### 704、二分查找
+
+给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target  ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。
+
+```java
+输入: nums = [-1,0,3,5,9,12], target = 9
+输出: 4
+解释: 9 出现在 nums 中并且下标为 4
+```
+
+**解析**
+
+二分查找的基础，主要是注意while循环成立的条件，注意只有一个数字的数组的特殊情况，
+
+**答案**
+
+```java
+   public int search(int[] nums,int target){
+        int left = 0;
+        int right = nums.length-1;
+       //注意这里，防止[5]的特殊情况发生
+        while(left <= right){
+            int mid = left + ((right-left) >>1);
+            if(nums[mid] == target){
+                return mid;
+            }
+            if (nums[mid] < target) {
+                left = mid+1;
+            }else{
+                right =  mid-1;
+            }
+        }
+        return -1;
+    }
+```
+
+
+
+### 34、在排序数组中查找元素的第一个和最后一个位置
+
+给定一个按照升序排列的整数数组 `nums`，和一个目标值 `target`。找出给定目标值在数组中的开始位置和结束位置。
+
+你的算法时间复杂度必须是 `O(log n)` 级别。
+
+如果数组中不存在目标值，返回` [-1, -1]`。
+
+```java
+输入: nums = [5,7,7,8,8,10], target = 8
+输出: [3,4]
+```
+
+**解析**
+
+
+
+**答案**
+
+自己写的，不是特别精简
+
+**注意数组只有一个数的时候**
+
+```java
+public int[] searchRange(int[] nums,int target){
+        int left = 0;
+        int right = nums.length-1;
+        int[] res = new int[2];
+    //注意这里
+    //相等的时候right不能等于mid，不然会进入死循环
+        while(left <= right){
+            int mid = left+((right-left)>>1);
+            if(target == nums[mid]){
+                int temp = mid;
+                while(mid> 0 && nums[mid-1] == target){
+                    mid--;
+                }
+                res[0] = mid;
+                mid = temp;
+                while(mid+1 < nums.length && nums[mid+1] == target){
+                    mid++;
+                }
+                res[1] = mid;
+                return res;
+                //注意这里
+            }else if(target < nums[mid]){
+                right = mid-1;
+            }else{
+                left = mid+1;
+            }
+        }
+        return new int[]{-1,-1};
+    }
+```
+
+```java
+//另外一种方法，做了稍微一点修改
+//为什么right = mid 是因为两数取中的时候是整除
+     public int[] searchRange(int[] nums,int target){
+        int left = 0;
+         //注意这里
+        int right = nums.length;
+        int[] res = new int[2];
+         //注意这里
+        while(left < right){
+            int mid = left+((right-left)>>1);
+            if(target == nums[mid]){
+                int temp = mid;
+                while(mid> 0 && nums[mid-1] == target){
+                    mid--;
+                }
+                res[0] = mid;
+                mid = temp;
+                while(mid+1 < nums.length && nums[mid+1] == target){
+                    mid++;
+                }
+                res[1] = mid;
+                return res;
+                //注意这里，不能反过来用left = mid
+            }else if(target < nums[mid]){
+                right = mid;
+            }else{
+                left = mid+1;
+            }
+        }
+        return new int[]{-1,-1};
+    }
+}
+```
+
+
+
+### 33、搜索旋转排序数组
+
+假设按照升序排序的数组在预先未知的某个点上进行了旋转。
+
+( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
+
+搜索一个给定的目标值，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。
+
+你可以假设数组中不存在重复的元素。
+
+你的算法时间复杂度必须是 O(log n) 级别。
+
+```java
+输入: nums = [4,5,6,7,0,1,2], target = 0
+输出: 4
+```
+
+
+
+**答案**
+
+```java
+public static int search(int[] nums, int target) {
+    int start = 0, end = nums.length - 1;
+//注意这里
+    while (start <= end) {
+        int mid = (start + end) / 2;
+        if (nums[mid]==target) return mid;
+
+        if (nums[mid] >= nums[start]) {
+            if (target < nums[mid] && target >= nums[start]) {
+                end = mid - 1;
+            } else {
+                start = mid + 1;
+            }
+
+        }
+
+        if (nums[mid] <= nums[end]) {
+            if (target > nums[mid] && target <= nums[end]) {
+                start = mid + 1;
+            } else {
+                end = mid - 1;
+            }
+        }
+    }
+
+    return -1;
+}
+```
+
+
+
+
+
+### 81、旋转排序数组Ⅱ
+
+假设按照升序排序的数组在预先未知的某个点上进行了旋转。
+
+( 例如，数组 [0,0,1,2,2,5,6] 可能变为 [2,5,6,0,0,1,2] )。
+
+编写一个函数来判断给定的目标值是否存在于数组中。若存在返回 true，否则返回 false。
+
+注意：**存在重复数字**
+
+示例 1:
+
+```java
+输入: nums = [2,5,6,0,0,1,2], target = 0
+输出: true
+```
+
+**答案**
+
+```java
+public boolean search(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return false;
+        }
+        int start = 0;
+        int end = nums.length - 1;
+        int mid;
+    //注意这里相等，后面只能mid+1和mid-1
+        while (start <= end) {
+            mid = start + (end - start) / 2;
+            if (nums[mid] == target) {
+                return true;
+            }
+            //重复出现干扰项
+            if (nums[start] == nums[mid]) {
+                start++;
+                continue;
+            }
+            //前半部分有序
+            if (nums[start] < nums[mid]) {
+                //target在前半部分
+                if (nums[mid] > target && nums[start] <= target) {
+                    end = mid - 1;
+                } else {  //否则，去后半部分找
+                    start = mid + 1;
+                }
+            } else {
+                //后半部分有序
+                //target在后半部分
+                if (nums[mid] < target && nums[end] >= target) {
+                    start = mid + 1;
+                } else {  //否则，去后半部分找
+                    end = mid - 1;
+                }
+            }
+        }
+        //一直没找到，返回false
+        return false;
+    }
+```
+
+
+
+
+
+### 153、寻找旋转排序数组中的最小值
+
+假设按照升序排序的数组在预先未知的某个点上进行了旋转。
+
+( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
+
+请找出其中最小的元素。
+
+**你可以假设数组中不存在重复元素。**
+
+
+
+**解析**
+
+这道题没有要求，就还简单
+
+**答案**
+
+```java
+    public int findMin(int[] nums) {
+        int len = nums.length;
+        if (len == 0) {
+            throw new IllegalArgumentException("数组为空，无最小元素");
+        }
+        int left = 0;
+        int right = len - 1;
+        while (left < right) {
+            // int mid = left + (right - left) / 2;
+            int mid = (left + right) >>> 1;
+            if (nums[mid] > nums[right]) {
+                left = mid + 1;
+            } else {
+                // 因为题目中说：你可以假设数组中不存在重复元素。
+                // 此时一定有 nums[mid] < nums[right]
+                right = mid;
+            }
+        }
+        // 一定存在最小元素，因此无需再做判断
+        return nums[left];
+    }
+}
+```
+
+
+
+### 154、寻找旋转排序数组中的最小值Ⅱ
+
+假设按照升序排序的数组在预先未知的某个点上进行了旋转。
+
+( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
+
+请找出其中最小的元素。
+
+**注意数组中可能存在重复的元素**。
+
+**解析**
+
+因为存在重复
+
+**答案**
+
+```java
+public int findMin(int[] nums) {
+        int left = 0;
+        int right = nums.length-1;
+        while(right > left){
+            if (nums[left] < nums[right]) {
+                return nums[left];
+            }
+                int mid = left+((right-left)>>1);
+                if(nums[mid] > nums[left]){
+                    left = mid+1;
+                }else if(nums[mid] < nums[right]){
+                    right = mid;
+                }else{
+                    left++;
+                }
+        }
+        return nums[left];
+    }
+```
+
+
+
+
+
+### 300.最长上升子序列
+
+给定一个无序的整数数组，找到其中最长上升子序列的长度。
+
+**示例:**
+
+```
+输入: [10,9,2,5,3,7,101,18]
+输出: 4 
+解释: 最长的上升子序列是 [2,3,7,101]，它的长度是 4。
+```
+
+**说明:**
+
+- 可能会有多种最长上升子序列的组合，你只需要输出对应的长度即可。
+- 你算法的时间复杂度应该为 O(*n2*) 。
+
+**进阶:** 你能将算法的时间复杂度降低到 O(*n* log *n*) 吗?
+
+
+
+**答案**
+
+**动态规划**
+
+使用一个最大值数组保存每次遍历的最大值，
+
+动态规划每次使用上一次的最大值和现在进行比较，如果满足条件，那就在原来基础上递增
+
+步骤
+
+1. **定义状态**  `dp[i]` 表示**以 `nums[i]` 结尾**的「上升子序列」的长度
+
+2. **考虑状态转移方程**   
+
+   <img src="../../../ZZZ_files/学习/算法/Leetcode题解心得/image-20200427103029475.png" alt="image-20200427103029475" style="zoom: 80%;" />
+
+3. **考虑初始化**  `dp[i] = 1`，11 个字符显然是长度为 11 的上升子序列。
+
+4. **考虑输出**  最后一个状态值只是以 `nums[len - 1]` 结尾的「上升子序列」的长度，`dp`的最大值才是最后的输出值
+
+5. **考虑状态压缩**
+
+```java
+public class Solution {
+    public int lengthOfLIS(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        int[] dp = new int[nums.length];
+        dp[0] = 1;
+        int maxans = 1;
+        //注意i从1开始
+        for (int i = 1; i < dp.length; i++) {
+            int maxval = 0;
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    maxval = Math.max(maxval, dp[j]);
+                }
+            }
+            dp[i] = maxval + 1;
+            maxans = Math.max(maxans, dp[i]);
+        }
+        return maxans;
+    }
+}
+```
+
+
+
+**贪心+二分**
+
+> 考虑一个简单的贪心，如果我们要使上升子序列尽可能的长，则我们需要让序列上升得尽可能慢，因此我们希望每次在上升子序列最后加上的那个数尽可能的小。
+
++ 二分主要是为了找到第一个大于nums[i]的数，前提是tail数组是一个递增的数组
++ 贪心是
+
+**状态定义**：
+
++ `tails[k]` 的值代表 长度为 `k+1` 子序列 的尾部元素值。
+
+**转移方程**： 设 `res `为 `tails` 当前长度，代表直到当前的最长上升子序列长度。设 j∈[0,res)，考虑每轮遍历 `nums[k]` 时，通过二分法遍历` [0,res)` 列表区间，找出 `nums[k]` 的大小分界点，会出现两种情况：
+
++ 区间中存在 `tails[i] > nums[k]`： 将第一个满足 `tails[i] > nums[k]`执行` tails[i] = nums[k]`；因为更小的 nums[k]后更可能接一个比它大的数字（前面分析过）。
++ 区间中不存在 `tails[i] > nums[k]` ： 意味着 `nums[k] `可以接在前面所有长度的子序列之后，因此肯定是接到最长的后面（长度为 `res `），新子序列长度为` res + 1`。
+
+**初始状态**：
+
++ 令 `tails `列表所有值 `=0`。·
+
+**返回值**：
+
++ 返回 res ，即最长上升子子序列长度。
+
+
+
+> 自我解读
+>
+> 只要比尾部大说明可以继续成为连续数组，二分的作用就是遍历数组看是不是这个数比尾部都大
+>
+> 
+
+```java
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int[] tails = new int[nums.length];
+        int res = 0;
+        for(int num : nums) {
+            int i = 0, j = res;
+            while(i < j) {
+                int m = (i + j) / 2;
+                if(tails[m] < num) i = m + 1;
+                else j = m;
+            }
+            //尾部数组插入值，可能是新值也可能更新
+            tails[i] = num;
+            //如果res==j说明长度变长了
+            if(res == j) res++;
+        }
+        return res;
+    }
+}
+```
+
+### 275、H指数Ⅱ
+
+定一位研究者论文被引用次数的数组（被引用次数是非负整数），数组已经按照升序排列。编写一个方法，计算出研究者的 h 指数。
+
+h 指数的定义: “h 代表“高引用次数”（high citations），一名科研人员的 h 指数是指他（她）的 （N 篇论文中）至多有 h 篇论文分别被引用了至少 h 次。（其余的 N - h 篇论文每篇被引用次数不多于 h 次。）"
+
+```java
+输入: citations = [0,1,3,5,6]
+输出: 3 
+解释: 给定数组表示研究者总共有 5 篇论文，每篇论文相应的被引用了 0, 1, 3, 5, 6 次。
+     由于研究者有 3 篇论文每篇至少被引用了 3 次，其余两篇论文每篇被引用不多于 3 次，所以她的 h 指数是 3。
+```
+
+
+
+**答案**
+
+方法1：
+
+```java
+    public int hIndex(int[] citations) {
+        int len = citations.length;
+        // 特判
+        if (len == 0 || citations[len - 1] == 0) {
+            return 0;
+        }
+        int left = 0;
+        int right = len - 1;
+        while (left < right) {
+            int mid = (left + right) >>> 1;
+            // 比长度小，就得去掉该值
+            if (citations[mid] < len - mid) {
+                left = mid + 1;
+            } else {
+                // 比长度大是满足的，我们应该继续让 mid 往左走去尝试看有没有更小的 mid 值
+                // 可以满足 mid 对应的值大于等于从 [mid, len - 1] 的长度
+                right = mid;
+            }
+        }
+        return len - left;
+    }
+```
+
+方法2：常规思路
+
+```java
+public int hIndex(int[] citations) {
+    int idx = 0, n = citations.length;
+    int pivot, left = 0, right = n - 1;
+    while (left <= right) {
+        pivot = left + (right - left) / 2;
+        if (citations[pivot] == n - pivot){
+            return n - pivot;
+        }
+        else if (citations[pivot] < n - pivot) {
+            left = pivot + 1;
+        }
+        else {
+            right = pivot - 1;
+        }
+    }
+    return n - left;
+}
+```
+
+### 1095、山脉数组中查找目标值
+
+（这是一个 交互式问题 ）
+
+给你一个 山脉数组 `mountainArr`，请你返回能够使得 `mountainArr.get(index) `等于 `target `最小 的下标 `index `值。
+
+如果不存在这样的下标 `index`，就请返回 -1。
+
+
+
+何为山脉数组？如果数组 A 是一个山脉数组的话，那它满足如下条件：
+
+**首先**，`A.length >= 3`
+
+**其次**，在 0 < i < A.length - 1 条件下，存在 i 使得：
+
++ `A[0] < A[1] < ... A[i-1] < A[i]`
++ `A[i] > A[i+1] > ... > A[A.length - 1]`
+
+
+你将 不能直接访问该山脉数组，必须通过 `MountainArray `接口来获取数据：
+
++ `MountainArray.get(k)` - 会返回数组中索引为`k `的元素（下标从 0 开始）
+
++ `MountainArray.length() `- 会返回该数组的长度
+
+**注意：**
+
+对` MountainArray.get` 发起超过 100 次调用的提交将被视为错误答案。此外，任何试图规避判题系统的解决方案都将会导致比赛资格被取消。
+
+为了帮助大家更好地理解交互式问题，我们准备了一个样例 “答案”：https://leetcode-cn.com/playground/RKhe3ave，请注意这 不是一个正确答案。
+
+```java
+输入：array = [1,2,3,4,5,3,1], target = 3
+输出：2
+解释：3 在数组中出现了两次，下标分别为 2 和 5，我们返回最小的下标 2。
+
+```
+
+**解析**
+
+
+
+**答案**
+
+```java
+/**
+ * // This is MountainArray's API interface.
+ * // You should not implement it, or speculate about its implementation
+ */
+
+interface MountainArray {
+    public int get(int index);
+
+    public int length();
+}
+
+
+class MountainArrayImpl implements MountainArray {
+    private int[] arr;
+    private int size;
+
+    public MountainArrayImpl(int[] arr) {
+        this.arr = arr;
+        this.size = this.arr.length;
+    }
+
+    @Override
+    public int get(int index) {
+        return this.arr[index];
+    }
+
+    @Override
+    public int length() {
+        return this.size;
+    }
+
+}
+
+class Solution {
+
+    // 特别注意：3 个辅助方法的分支出奇地一样，因此选中位数均选左中位数，才不会发生死循环
+
+    public int findInMountainArray(int target, MountainArray mountainArr) {
+        int size = mountainArr.length();
+        // 步骤 1：先找到山顶元素所在的索引
+        int mountaintop = findMountaintop(mountainArr, 0, size - 1);
+        // 步骤 2：在前有序且升序数组中找 target 所在的索引
+        int res = findFromSortedArr(mountainArr, 0, mountaintop, target);
+        if (res != -1) {
+            return res;
+        }
+        // 步骤 3：如果步骤 2 找不到，就在后有序且降序数组中找 target 所在的索引
+        return findFromInversedArr(mountainArr, mountaintop + 1, size - 1, target);
+    }
+
+    private int findMountaintop(MountainArray mountainArr, int l, int r) {
+        // 返回山顶元素
+        while (l < r) {
+            int mid = l + (r - l) / 2;
+            // 取左中位数，因为进入循环，数组一定至少有 2 个元素
+            // 因此，左中位数一定有右边元素，数组下标不会发生越界
+            if (mountainArr.get(mid) < mountainArr.get(mid + 1)) {
+                // 如果当前的数比右边的数小，它一定不是山顶
+                l = mid + 1;
+            } else {
+                r = mid;
+            }
+        }
+        // 根据题意，山顶元素一定存在，因此退出 while 循环的时候，不用再单独作判断
+        return l;
+    }
+
+    private int findFromSortedArr(MountainArray mountainArr, int l, int r, int target) {
+        // 在前有序且升序数组中找 target 所在的索引
+        while (l < r) {
+            int mid = l + (r - l) / 2;
+            if (mountainArr.get(mid) < target) {
+                l = mid + 1;
+            } else {
+                r = mid;
+            }
+
+        }
+        // 因为不确定区间收缩成 1个数以后，这个数是不是要找的数，因此单独做一次判断
+       
+    }
+
+    private int findFromInversedArr(MountainArray mountainArr, int l, int r, int target) {
+        // 在后有序且降序数组中找 target 所在的索引
+        while (l < r) {
+            int mid = l + (r - l) / 2;
+            // 与 findFromSortedArr 方法不同的地方仅仅在于由原来的小于号改成大于好
+            if (mountainArr.get(mid) > target) {
+                l = mid + 1;
+            } else {
+                r = mid;
+            }
+
+        }
+        // 因为不确定区间收缩成 1个数以后，这个数是不是要找的数，因此单独做一次判断
+        if (mountainArr.get(l) == target) {
+            return l;
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5, 3, 1};
+        int target = 3;
+        MountainArray mountainArray = new MountainArrayImpl(arr);
+
+        Solution solution = new Solution();
+        int res = solution.findInMountainArray(target, mountainArray);
+        System.out.println(res);
+    }
+}
+```
+
+
+
+
+
+### 69、平方根
+
+实现 int sqrt(int x) 函数。
+
+计算并返回 x 的平方根，其中 x 是非负整数。
+
+由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。
+
+```java
+输入: 8
+输出: 2
+说明: 8 的平方根是 2.82842..., 
+     由于返回类型是整数，小数部分将被舍去。
+```
+
+
+
+**解析**
+
++ right可以取x/2开始
++ 
+
+
+
+**答案**
+
+**二分查找法**
+
+满足题意的解法
+
+```java
+public int sqrt(int x){
+    long left = 0;
+    //主要是特判x = 0的时候。不然可以right = x/2
+    long right = x/2+1;
+    while(left < right){
+        //// 注意：这里一定取右中位数，如果取左中位数，代码会进入死循环
+        long mid = (right + left+1)>>>1;
+        //当取左的时候
+        if(mid > x/mid){
+            right = mid-1;
+        }else{
+            left = mid;
+        }
+    }
+    return (int) left;
+}
+```
+
+
+
+
+
+**牛顿迭代法**
+
+![image-20200507182434552](Page2/image-20200507182434552.png)
+
+```java
+public class Solution {
+
+    public int mySqrt(int a) {
+        long x = a;
+        while (x * x > a) {
+            x = (x + a / x) / 2;
+        }
+        return (int) x;
+    }
+}
+```
+
+
+
+### 287、寻找重复数
+
+给定一个包含 n + 1 个整数的数组 nums，其数字都在 1 到 n 之间（包括 1 和 n），可知至少存在一个重复的整数。假设只有一个重复的整数，找出这个重复的数。
+
+```java
+输入: [1,3,4,2,2]
+输出: 2
+```
+
+​	
+
+**解析**
+
+最简单就是用map，但是为了降低空间复杂度，考虑二分
+
+注意二分的目标
+
+
+
+**答案**
+
+
+
+**二分法**
+
+时间复杂度：`O(NlogN)`，二分法的时间复杂度为 `O(logN)`，在二分法的内部，执行了一次 for 循环，时间复杂度为 O(N)，故时间复杂度为 ·`O(NlogN)`
+
+空间复杂度：`O(1)`，使用了一个 cnt 变量，因此空间复杂度为 O(1)。
+
+```java
+public class Solution {
+
+    public int findDuplicate(int[] nums) {
+        int len = nums.length;
+        int left = 1;
+        int right = len - 1;
+        while (left < right) {
+            // 在 Java 里可以这么用，当 left + right 溢出的时候，无符号右移保证结果依然正确
+            int mid = (left + right) >>> 1;
+            
+            int cnt = 0;
+            for (int num : nums) {
+                if (num <= mid) {
+                    cnt += 1;
+                }
+            }
+
+            // 根据抽屉原理，小于等于 4 的个数如果严格大于 4 个
+            // 此时重复元素一定出现在 [1, 4] 区间里
+
+            if (cnt > mid) {
+                /eer
+            }
+        }
+        return left;
+    }
+}
+```
+
+
+
+
+
+
+
+### 374、猜数字
+
+我们正在玩一个猜数字游戏。 游戏规则如下：
+我从 1 到 n 选择一个数字。 你需要猜我选择了哪个数字。
+每次你猜错了，我会告诉你这个数字是大了还是小了。
+你调用一个预先定义好的接口 guess(int num)，它会返回 3 个可能的结果（-1，1 或 0）：
+
+```java
+-1 : 我的数字比较小
+ 1 : 我的数字比较大
+ 0 : 恭喜！你猜对了！
+```
+
+示例
+
+```java
+输入: n = 10, pick = 6
+输出: 6
+```
+
+
+
+**解析**
+
+采用的取上边界中位数的方法，下边界也可以的
+
+**答案**
+
+```java
+class GuessGame {
+
+    private static final int NUM = 6;
+
+    int guess(int num) {
+        if (num == NUM) {
+            return 0;
+        } else if (num < NUM) {
+            return -1;
+        }
+        return 1;
+    }
+}
+public class Solution extends GuessGame {
+    public int guessNumber(int n){
+        int left = 1;
+        int right = n;
+        while(left < right){
+            int mid = (left + right + 1) >>> 1;
+            if(guess(mid) == -1){
+                right = mid-1;
+            }else{
+                left = mid;
+            }
+        }
+        return left;
+    }
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int n = 10;
+        int guessNumber = solution.guessNumber(n);
+        System.out.println(guessNumber);
+    }
+}
+```
+
+
+
+### 278、第一个错误版本
+
+你是产品经理，目前正在带领一个团队开发新的产品。不幸的是，你的产品的最新版本没有通过质量检测。由于每个版本都是基于之前的版本开发的，所以错误的版本之后的所有版本都是错的。
+
+假设你有 n 个版本 [1, 2, ..., n]，你想找出导致之后所有版本出错的第一个错误的版本。
+
+你可以通过调用 bool isBadVersion(version) 接口来判断版本号 version 是否在单元测试中出错。实现一个函数来查找第一个错误的版本。你应该尽量减少对调用 API 的次数。
+
+```java
+给定 n = 5，并且 version = 4 是第一个错误的版本。
+
+调用 isBadVersion(3) -> false
+调用 isBadVersion(5) -> true
+调用 isBadVersion(4) -> true
+
+所以，4 是第一个错误的版本。 
+```
+
+
+
+**答案**
+
+和上面一道题差不多
+
+```java
+class VersionControl{
+    private int target = 6;
+    public boolean isBadVersion(int n){
+        if(n == target){
+            return true;
+        }else{
+            return  false;
+        }
+    }
+}
+
+public class Solution extends VersionControl {
+    public int firstBadVersion(int n) {
+        int left = 1;
+        int right = n;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (isBadVersion(mid)) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+}
+```
+
+### 410、分割数组的最大值
+
+给定一个非负整数数组和一个整数 m，你需要将这个数组分成 m 个非空的连续子数组。设计一个算法使得这 m 个子数组各自和的最大值最小。
+
+注意:
+数组长度 n 满足以下条件:
+
+1 ≤ n ≤ 1000
+1 ≤ m ≤ min(50, n)
+
+```java
+示例:
+
+输入:
+nums = [7,2,5,10,8]
+m = 2
+
+输出:
+18
+
+解释:
+一共有四种方法将nums分割为2个子数组。
+其中最好的方式是将其分为[7,2,5] 和 [10,8]，
+因为此时这两个子数组各自的和的最大值为18，在所有情况中最小
+```
+
+
+
+**答案**
+
+
+
+**动态规划**
+
+首先我们把 `f[i][j]` 定义为将 `nums[0..i]` 分成 `j` 份时能得到的最小的分割子数组最大值。
+
+对于第 j 个子数组，它为数组中下标 k + 1 到 i 的这一段。因此，f[i][j] 可以从 max(f[k][j - 1], nums[k + 1] + ... + nums[i]) 这个公式中得到。遍历所有可能的 k，会得到 f[i][j] 的最小值。
+
+整个算法那的最终答案为 `f[n][m]`，其中 `n` 为数组大小。
+
+```java
+public int splitArray2(int[] nums, int m) {
+        int n = nums.length;
+        int[][] f = new int[n + 1][m + 1];
+        int[] sub = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= m; j++) {
+                f[i][j] = Integer.MAX_VALUE;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            sub[i + 1] = sub[i] + nums[i];
+        }
+        f[0][0] = 0;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                for (int k = 0; k < i; k++) {
+                    f[i][j] = Math.min(f[i][j], Math.max(f[k][j - 1], sub[i] - sub[k]));
+                }
+            }
+        }
+        return f[n][m];
+    }
+```
+
+时间复杂度： O(n^2 * m)
+
+空间复杂度： O(n * m)
+
+
+
+二分+贪心
+
++ 二分的是num值，从最大值（一个数一组）到所有值之和（所有数一组）
++ 每次判断以这个数为最大值产生的分组数是否大于约定的组数m
++ 
+
+```java
+    public int splitArray3(int[] nums,int M){
+        int max = 0;
+        long sum = 0;
+        for(int num : nums) {
+            max = Math.max(max, num);
+            sum += num;
+        }
+
+        long l = max;
+        long r = sum;
+        long mid;
+        while(l < r){
+            mid = l+(r-l)/2;
+            if(count(mid,nums) <= m){
+                r = mid;
+            }else{
+                l =mid+1;
+            }
+        }
+        return (int) l;
+    }
+
+    private int count(long target, int[] nums) {
+        long sum = 0;
+        int count = 1;
+        for(int num : nums) {
+            sum += num;
+            if(sum > target) {
+                count++;
+                sum = num;
+            }
+        }
+        return count;
+    }
+```
+
+
+
+
+
+### 658、找到k个最接近的元素
+
+给定一个排序好的数组，两个整数 k 和 x，从数组中找到最靠近 x（两数之差最小）的 k 个数。返回的结果必须要是按升序排好的。如果有两个数与 x 的差值一样，优先选择数值较小的那个数。
+
+```java
+输入: [1,2,3,4,5], k=4, x=3
+输出: [1,2,3,4]
+```
+
+
+
+**答案**
+
+双指针法
+
++ 维护左右指针，每次判断左右边界和指定值的差值
++ 依次删除，直到剩余元素是需要的元素
+
+```java
+public List<Integer> findClosestElelment(int[] arr,int k,int x){
+        List<Integer> res = new ArrayList<>();
+        int left = 0;
+        int right = arr.length-1;
+        int removeNums = arr.length - k;
+        while(removeNums > 0){
+            if (x - arr[left] <= arr[right] - x) {
+                right--;
+            } else {
+                left++;
+            }
+            removeNums--;
+        }
+        for (int i = left; i < left + k; i++) {
+            res.add(arr[i]);
+        }
+        return res;
+    }
+```
+
+二分查找法
+
+```java
+public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        int size = arr.length;
+
+        int left = 0;
+        int right = size - k;
+
+        while (left < right) {
+            // int mid = left + (right - left) / 2;
+            int mid = (left + right) >>> 1;
+            // 尝试从长度为 k + 1 的连续子区间删除一个元素
+            // 从而定位左区间端点的边界值
+            if (x - arr[mid] > arr[mid + k] - x) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+
+        List<Integer> res = new ArrayList<>();
+        for (int i = left; i < left + k; i++) {
+            res.add(arr[i]);
+        }
+        return res;
+    }
+
+```
+
+
+
+
+
+
+
+### 875、爱吃香蕉的珂珂
+
+珂珂喜欢吃香蕉。这里有 N 堆香蕉，第 i 堆中有 piles[i] 根香蕉。警卫已经离开了，将在 H 小时后回来。
+
+珂珂可以决定她吃香蕉的速度 K （单位：根/小时）。每个小时，她将会选择一堆香蕉，从中吃掉 K 根。如果这堆香蕉少于 K 根，她将吃掉这堆的所有香蕉，然后这一小时内不会再吃更多的香蕉。  
+
+珂珂喜欢慢慢吃，但仍然想在警卫回来前吃掉所有的香蕉。
+
+返回她可以在 H 小时内吃掉所有香蕉的最小速度 K（K 为整数）。
+
+```java
+输入: piles = [3,6,7,11], H = 8
+输出: 4
+```
+
+
+
+**答案**
+
++ 速度越小，耗时越多；
++ 搜索的是速度。因为题目限制了珂珂一个小时之内只能选择一堆香蕉吃，因此速度最大值就是这几堆香蕉中，数量最多的那一堆。速度的最小值是 1（其实还可以再分析一下下界是多少）
++ 还是因为珂珂一个小时之内只能选择一堆香蕉吃，因此：每堆香蕉吃完的耗时 = 这堆香蕉的数量 / 珂珂一小时吃香蕉的数量，这里的 / 在不能整除的时候，需要上取整。
+
+
+```java
+public class Solution {
+
+    public int minEatingSpeed(int[] piles, int H) {
+        int maxVal = 1;
+        for (int pile : piles) {
+            maxVal = Math.max(maxVal, pile);
+        }
+
+        // 速度最小的时候，耗时最长
+        int left = 1;
+        // 速度最大的时候，耗时最短
+        int right = maxVal;
+
+        while (left < right) {
+            int mid = (left + right) >>> 1;
+
+            if (calculateSum(piles, mid) > H) {
+                // 耗时太多，说明速度太慢了，下一轮搜索区间在
+                // [mid + 1, right]
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+
+    /**
+     * 如果返回的小时数严格大于 H，就不符合题意
+     *
+     * @param piles
+     * @param speed
+     * @return 需要的小时数
+     */
+    private int calculateSum(int[] piles, int speed) {
+        int sum = 0;
+        for (int pile : piles) {
+
+            // 上取整可以这样写
+            sum += (pile + speed - 1) / speed;
+
+        }
+        return sum;
+    }
+}
+```
+
+
+
+
+
+
+
+### 1300、转变数组后最接近目标值的数组和
+
+给你一个整数数组 arr 和一个目标值 target ，请你返回一个整数 value ，使得将数组中所有大于 value 的值变成 value 后，数组的和最接近  target （最接近表示两者之差的绝对值最小）。
+
+如果有多种使得和最接近 target 的方案，请你返回这些整数中的最小值。
+
+请注意，答案不一定是 arr 中的数字。
+
+```java
+输入：arr = [4,9,3], target = 10
+输出：3
+解释：当选择 value 为 3 时，数组会变成 [3, 3, 3]，和为 9 ，这是最接近 target 的方案。
+
+```
+
+
+
+
+
+**答案**
+
+如果选择一个阈值 `value` ，使得它对应的 `sum` 是第 1 个大于等于 `target` 的，那么目标值可能在 `value` 也可能在 `value - 1`。
+
+```java
+public class Solution {
+    
+    public int findBestValue(int[] arr, int target) {
+        int left = 0;
+        int right = 10_0000;
+
+        //mid = （l+ r+1）/2也可以
+        while (left < right) {
+            int mid = (left + right) >>> 1;
+            int sum = calculateSum(arr, mid);
+            // 计算第 1 个大于等于 target 的阈值
+            if (sum < target) {
+                // 严格小于的一定不是解
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+
+        // 比较阈值线分别定在 left - 1 和 left 的时候与 target 的接近程度
+        int sum1 = calculateSum(arr, left - 1);
+        int sum2 = calculateSum(arr, left);
+        if (target - sum1 <= sum2 - target) {
+            return left - 1;
+        }
+        return left;
+    }
+
+    private int calculateSum(int[] arr, int threshold) {
+        int sum = 0;
+        for (int num : arr) {
+            sum += Math.min(num, threshold);
+        }
+        return sum;
+    }
+}
+```
+
+
 
 ## 回溯专题
 
@@ -2564,7 +4139,7 @@ public List<List<Integer>> fourSum(int[] nums,int target){
 + 重复数字相邻的情况，会得出相同的结果
 + 连续两个使用同一个相同的数字的时候（反映在used数组上面）
 
-![image-20200406152152933](../../../ZZZ_files/学习/算法/Leetcode题解心得/image-20200406152152933.png)
+![image-20200406152152933](Page2/image-20200406152152933-1590906921758.png)
 
 ```java
 class Solution {
@@ -3733,123 +5308,6 @@ public List<List<Integer>> threeSum(int[] nums){
 
 
 
-### 33、旋转排序数组
-
-假设按照升序排序的数组在预先未知的某个点上进行了旋转。
-
-( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
-
-搜索一个给定的目标值，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。
-
-你可以假设数组中不存在重复的元素。
-
-你的算法时间复杂度必须是 O(log n) 级别。
-
-```java
-输入: nums = [4,5,6,7,0,1,2], target = 0
-输出: 4
-```
-
-
-
-**答案**
-
-```java
-public static int search(int[] nums, int target) {
-    int start = 0, end = nums.length - 1;
-
-    while (start <= end) {
-        int mid = (start + end) / 2;
-        if (nums[mid]==target) return mid;
-
-        if (nums[mid] >= nums[start]) {
-            if (target < nums[mid] && target >= nums[start]) {
-                end = mid - 1;
-            } else {
-                start = mid + 1;
-            }
-
-        }
-
-        if (nums[mid] <= nums[end]) {
-            if (target > nums[mid] && target <= nums[end]) {
-                start = mid + 1;
-            } else {
-                end = mid - 1;
-            }
-        }
-    }
-
-    return -1;
-}
-```
-
-
-
-
-
-### 34、旋转排序数组Ⅱ
-
-假设按照升序排序的数组在预先未知的某个点上进行了旋转。
-
-( 例如，数组 [0,0,1,2,2,5,6] 可能变为 [2,5,6,0,0,1,2] )。
-
-编写一个函数来判断给定的目标值是否存在于数组中。若存在返回 true，否则返回 false。
-
-注意：**存在重复数字**
-
-示例 1:
-
-```java
-输入: nums = [2,5,6,0,0,1,2], target = 0
-输出: true
-```
-
-**答案**
-
-```java
-public boolean search(int[] nums, int target) {
-        if (nums == null || nums.length == 0) {
-            return false;
-        }
-        int start = 0;
-        int end = nums.length - 1;
-        int mid;
-        while (start <= end) {
-            mid = start + (end - start) / 2;
-            if (nums[mid] == target) {
-                return true;
-            }
-            //重复出现干扰项
-            if (nums[start] == nums[mid]) {
-                start++;
-                continue;
-            }
-            //前半部分有序
-            if (nums[start] < nums[mid]) {
-                //target在前半部分
-                if (nums[mid] > target && nums[start] <= target) {
-                    end = mid - 1;
-                } else {  //否则，去后半部分找
-                    start = mid + 1;
-                }
-            } else {
-                //后半部分有序
-                //target在后半部分
-                if (nums[mid] < target && nums[end] >= target) {
-                    start = mid + 1;
-                } else {  //否则，去后半部分找
-                    end = mid - 1;
-                }
-            }
-        }
-        //一直没找到，返回false
-        return false;
-    }
-```
-
-
-
 
 
 ### 42、接雨水
@@ -4000,7 +5458,7 @@ private ListNode merge(ListNode l1, ListNode l2) {
 
 **牛顿迭代法**
 
-![image-20200407123649141](Page2/image-20200407123649141.png)
+![image-20200407123649141](Page2/image-20200407123649141-1590906921758.png)
 
 ```java
 public int mySqrt(int x) {
