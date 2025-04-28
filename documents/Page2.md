@@ -1,18 +1,12 @@
 # LeetCode解题心得
 
-
-
-
-
 ### 1、两数之和
-
-
 
 + 把数值存在Hash表里，牺牲空间换取时间
 + 同时要注意数字相同的情况
 
 > 时间复杂度：O(n)， 我们把包含有 n 个元素的列表遍历两次。由于哈希表将查找时间缩短到 O(1) ，所以时间复杂度为 O(n)。
->
+> 
 > 空间复杂度：O(n)， 所需的额外空间取决于哈希表中存储的元素数量，该表中存储了 n 个元素。
 
 注意：
@@ -21,8 +15,6 @@
 + 数字的hash值就是本身
 
 ---
-
-
 
 ### 2、两数相加
 
@@ -50,8 +42,6 @@
 
 + 注意链表的递进关系要保持一致，不要错位
 
-  
-
 答案
 
 ```java
@@ -77,7 +67,6 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
     }
     return dummyHead.next;
 }
-
 ```
 
 暴露的问题
@@ -85,11 +74,7 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 + 对题目的解读不够全面
 + 基础的代码不会编写（链表如何递进）
 
-
-
 ---
-
-
 
 ### 3、无重复的最长字符串
 
@@ -120,10 +105,8 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 ```
 
 > 问题：如何快速检索重复的字符
->
+> 
 > 解答： 使用首尾索引确定字串，发现重复只需修改索引位置
-
-
 
 答案1:滑动窗口
 
@@ -180,8 +163,6 @@ public class Solution {
 
 ---
 
-
-
 ### 4.寻找两个有序数组的中位数*
 
 给定两个大小为 m 和 n 的有序数组 nums1 和 nums2。
@@ -202,7 +183,6 @@ nums2 = [2]
 nums1 = [1, 2]
 nums2 = [3, 4]
 则中位数是 (2 + 3)/2 = 2.5
-
 ```
 
 **解析**
@@ -211,8 +191,6 @@ nums2 = [3, 4]
 
 + 逐渐消除消除小于k的值，并二分k
 + 利用类似于堆排序的思想，维护左右两堆
-
-
 
 **答案**
 
@@ -265,11 +243,7 @@ public double findMedianSortedArrays(int[] A, int[] B) {
 }
 ```
 
-
-
 3.求中位数，其实就是求第 `k` 小数的一种特殊情况
-
-
 
 假设我们要找第 `7` 小的数字。
 
@@ -297,7 +271,7 @@ public double findMedianSortedArrays(int[] nums1, int[] nums2) {
     //将偶数和奇数的情况合并，如果是奇数，会求两次同样的 k 。
     return (getKth(nums1, 0, n - 1, nums2, 0, m - 1, left) + getKth(nums1, 0, n - 1, nums2, 0, m - 1, right)) * 0.5;  
 }
-    
+
     private int getKth(int[] nums1, int start1, int end1, int[] nums2, int start2, int end2, int k) {
         //两点相减得到距离要+1
         int len1 = end1 - start1 + 1;
@@ -321,13 +295,9 @@ public double findMedianSortedArrays(int[] nums1, int[] nums2) {
     }
 ```
 
-
-
 4、类似归并的方法，对中位数进行切分
 
 [leetcode题解](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/solution/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-by-w-2/)
-
-
 
 **关于j的定义**
 
@@ -351,8 +321,6 @@ i + j = m - i  + n - j  , 也就是 j = ( m + n ) / 2 - i
 （max ( A [ i - 1 ] , B [  j  - 1 ]）+ min ( A [ i ] , B [ j ]）） /  2
 ```
 
-
-
 **2.当 A 数组和 B 数组的总长度是奇数时，如果我们能够保证**
 
 *左半部分的长度比右半部分大 1
@@ -372,8 +340,6 @@ max ( A [ i - 1 ] , B [  j - 1 ]）
 ```
 
 控制i，j将数组划分到左右两个堆中
-
-
 
 ```java
         public double findMedianSortedArrays3(int[] A, int[] B) {
@@ -455,11 +421,7 @@ max ( A [ i - 1 ] , B [  j - 1 ]）
         }
 ```
 
-
-
 ---
-
-
 
 ### 5.最长回文数
 
@@ -482,33 +444,25 @@ max ( A [ i - 1 ] , B [  j - 1 ]）
 
 > 问题
 
-
-
 **解析**
 
 + 注意中心扩展过程中下标的定位
-
+  
   确定`center`后，左右节点分别为`center+len` 和`center-len`
-
+  
   关于`center`中心对称的节点：`mirror = 2*center-i`
 
 + 
 
-
-
 **答案**
 
 1. 最长公共子串
-
+   
    特点：当 String的其他部分中存在非回文子串的反向副本时，最长公共子串法就会失败。为了纠正这一点，每当我们找到最长的公共子串的候选项时，都需要检查子串的索引是否与反向子串的原始索引相同。如果相同，那么我们尝试更新目前为止找到的最长回文子串；如果不是，我们就跳过这个候选项并继续寻找下一个候选。
 
-   
-
 2. 中心扩展算法
-
-   我们观察到回文中心的两侧互为镜像。因此，回文可以从它的中心展开，并且只有 2*n*−1 个这样的中心。
-
    
+   我们观察到回文中心的两侧互为镜像。因此，回文可以从它的中心展开，并且只有 2*n*−1 个这样的中心。
 
 ```java
 public String longestPalindrome(String s) {
@@ -547,8 +501,6 @@ private int expandAroundCenter(String s, int left, int right) {
 4. 判断`maxRight`和`p[mirror]`的情况
    + p[mirror]小于maxRight的情况可以直接抄过来，不需要进一步分析
    + 大于maxRight的情况需要中心扩展法进行分析
-
-
 
 ```java
 public class Solution {
@@ -640,15 +592,9 @@ public class Solution {
 }
 ```
 
-
-
-
-
 3. 动态规划法
 
 可以再[优化](https://leetcode-cn.com/problems/longest-palindromic-substring/solution/zhong-xin-kuo-san-dong-tai-gui-hua-by-liweiwei1419/)
-
-
 
 ```java
 public String longestPalindrome(String s) {
@@ -694,10 +640,6 @@ public String longestPalindrome(String s) {
     }
 ```
 
-
-
-
-
 ### 6.字形变换
 
 将一个给定字符串根据给定的行数，以从上往下、从左到右进行 Z 字形排列。
@@ -716,8 +658,6 @@ E   D   H   N
 输入: s = "LEETCODEISHIRING", numRows = 3
 输出: "LCIRETOESIIGEDHN"
 ```
-
-
 
 **答案**
 
@@ -779,15 +719,9 @@ class Solution {
 }
 ```
 
-
-
 ## 队列
 
 ### 队列实现栈
-
-
-
-
 
 ## 数组
 
@@ -803,8 +737,6 @@ class Solution {
 输入: [1,3,5,6], 5
 输出: 2
 ```
-
-
 
 **解析**
 
@@ -839,11 +771,7 @@ public int searchInsert2(int[] nums, int target) {
 
 ![image.png](https://pic.leetcode-cn.com/e120bac189db2fc912dce550d9c46746a312f362ee3d6d40e799aad8db69ae6f-image.png)
 
-
-
 #### 二分查找法的应用
-
-
 
 ### 200、岛屿数量
 
@@ -858,8 +786,6 @@ public int searchInsert2(int[] nums, int target) {
 
 输出: 1
 ```
-
-
 
 **答案**
 
@@ -904,8 +830,6 @@ public void dfs(char[][] grid, int r, int c) {
   }
 ```
 
-
-
 **广度优先遍历**
 
 保存队列的值比较巧妙
@@ -940,7 +864,7 @@ class Solution {
                         //还原横纵坐标
                         int row = id / nc;
                         int col = id % nc;
-                        
+
                         if (row - 1 >= 0 && grid[row-1][col] == '1') {
                             neighbors.add((row-1) * nc + col);
                             grid[row-1][col] = '0';
@@ -967,8 +891,6 @@ class Solution {
 }
 ```
 
-
-
 ### 695、岛屿的最大面积
 
 给定一个包含了一些 0 和 1 的非空二维数组 grid 。
@@ -986,11 +908,9 @@ class Solution {
  [0,0,0,0,0,0,0,0,0,0,1,0,0],
  [0,0,0,0,0,0,0,1,1,1,0,0,0],
  [0,0,0,0,0,0,0,1,1,0,0,0,0]]
- 
+
  返回6
 ```
-
-
 
 **答案**
 
@@ -1023,13 +943,10 @@ class Solution {
         num += dfs(i, j + 1, grid);
         num += dfs(i, j - 1, grid);
         return num;
-        
+
     }
 }
-
 ```
-
-
 
 **广度优先遍历**
 
@@ -1071,8 +988,6 @@ class Solution {
 }
 ```
 
-
-
 ### 215、数组中第k个最大的元素（最大的k个数）
 
 在未排序的数组中找到第 k 个最大的元素。请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
@@ -1087,8 +1002,6 @@ class Solution {
 输入: [3,2,3,1,2,4,5,5,6] 和 k = 4
 输出: 4
 ```
-
-
 
 **答案**
 
@@ -1145,8 +1058,6 @@ public static void fastSort(int[] nums, int start, int end) {
 }
 ```
 
-
-
 ```java
 // 说人话的版本
     public int findKthLargest(int[] nums, int k){
@@ -1183,8 +1094,6 @@ public static void fastSort(int[] nums, int start, int end) {
     } 
 ```
 
-
-
 ### 11、盛多水的容器
 
 给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
@@ -1192,10 +1101,6 @@ public static void fastSort(int[] nums, int start, int end) {
 说明：你不能倾斜容器，且 n 的值至少为 2。
 
 <img src="https://aliyun-lc-upload.oss-cn-hangzhou.aliyuncs.com/aliyun-lc-upload/uploads/2018/07/25/question_11.jpg" alt="img" style="zoom:50%;" />
-
-
-
-
 
 **解析**
 
@@ -1219,8 +1124,6 @@ public int maxArea(int[] height){
     }
 ```
 
-
-
 ### 26、删除排序数组的重复项
 
 给定一个排序数组，你需要在 原地 删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
@@ -1235,10 +1138,6 @@ public int maxArea(int[] height){
 你不需要考虑数组中超出新长度后面的元素。
 ```
 
-
-
-
-
 **解析**
 
 一开始面对递增数组重复，考虑使用二分查找，<mark>但是二分的思适合用于查重，可以查找到重复的数字，但是去重仍然比较麻烦，对每个数字进行查重时间复杂度也比较高</mark>，因此，这里选择使用双指针法判断并去重。
@@ -1250,8 +1149,6 @@ public int maxArea(int[] height){
 + 如果不相等，将 `q` 位置的元素复制到 `p+1 `位置上，`p `后移一位，`q `后移 `1 `位
   重复上述过程，直到 `q` 等于数组长度。
 + 返回 `p + 1`，即为新数组长度。
-
-
 
 ```java
  public int removeDuplicates(int[] nums) {
@@ -1275,8 +1172,6 @@ public int maxArea(int[] height){
 
 如果数组无重复数字，那么赋值就是无意义的。因此判断p，q之间的距离，出现重复再赋值
 
-
-
 ```java
 public int removeDuplicates(int[] nums) {
     if(nums == null || nums.length == 0) return 0;
@@ -1295,8 +1190,6 @@ public int removeDuplicates(int[] nums) {
 }
 ```
 
-
-
 ### 27、移除元素
 
 给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。
@@ -1304,8 +1197,6 @@ public int removeDuplicates(int[] nums) {
 不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。
 
 元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。
-
-
 
 ```java
 给定 nums = [3,2,2,3], val = 3,
@@ -1315,22 +1206,18 @@ public int removeDuplicates(int[] nums) {
 你不需要考虑数组中超出新长度后面的元素。
 ```
 
-
-
 **解析**
 
 依然使用双指针的方法做
 
 这里就是简单的完全覆盖
 
-
-
 **答案**
 
 ```java
 public int removeElement(int[] nums, int val) {
     int i = 0
-     
+
     for (int j = 0; j < nums.length; j++) {
         if (nums[j] != val) {
             nums[i] = nums[j];
@@ -1340,10 +1227,6 @@ public int removeElement(int[] nums, int val) {
     return i;
 }
 ```
-
-
-
-
 
 ## 字符串
 
@@ -1360,8 +1243,6 @@ public int removeElement(int[] nums, int val) {
 ```
 
 **解析**
-
-
 
 1. 找到最短字符串
 2. 构建二维数组
@@ -1385,7 +1266,7 @@ public String longestCommonPrefix(String[] strs) {
         char[] chars = strs[i].toCharArray();
         System.arraycopy(chars, 0, data[i], 0, minLen);
     }
-	//构建公共前缀
+    //构建公共前缀
     StringBuilder res = new StringBuilder();
     for (int i = 0; i < minLen; i++) {
         for (int j = 1; j < data.length; j++) {
@@ -1406,8 +1287,6 @@ public String longestCommonPrefix(String[] strs) {
 选取其中一个字符串，然后利用indexOf依次判断是不是其他字符串的子串
 
 如果是则返回，如果不是，则字符串缩短再次匹配
-
-
 
 + 时间复杂度：O(S)，S 是所有字符串中字符数量的总和。
 + 最坏的情况下，n 个字符串都是相同的。算法会将 S1 与其他字符串 [S 2 …S n ] 都做一次比较。这样就会进行 S 次字符比较，其中 S 是输入数据中所有字符数量。
@@ -1447,7 +1326,6 @@ public String longestCommonPrefix(String[] strs) {
     }
     return strs[0];
 }
-
 ```
 
 #### **二分查找**
@@ -1483,8 +1361,6 @@ private boolean isCommonPrefix(String[] strs, int len){
     return true;
 }
 ```
-
-
 
 ### 576、字符串的排列
 
@@ -1526,10 +1402,6 @@ public boolean checkInclusion(String s1, String s2) {
 }
 ```
 
-
-
-
-
 ### 43、字符串相乘
 
 给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
@@ -1544,14 +1416,10 @@ public boolean checkInclusion(String s1, String s2) {
 输入: num1 = "2", num2 = "3"
 ```
 
-
-
 **解析**
 
 1. 对于字符串 `num2` 中的每一位数与字符串 `num1` 相乘所得的结果，不再分开计算最后相加，而是先全部累加，最后再考虑进位的影响。
 2. 对于最终结果的第`i + j`位数，可以由 `num1` 数组的第 `i` 位数和 `num2` 数组的第 `j` 位数组成。
-
-
 
 **答案**
 
@@ -1592,8 +1460,6 @@ public String multiply(String num1,String num2){
         System.out.println(res);
     }
 ```
-
-
 
 ### 53、最大子序和
 
@@ -1646,7 +1512,9 @@ public int maxSubArray(int[] nums) {
 + 若  `n==1`，返回此元素。·
 
 + `left_sum` 为最大子数组前 `n/2` 个元素，在索引为` (left + right) / 2 `的元素属于左子数组。
+
 + `right_sum` 为最大子数组的右子数组，为最后 `n/2` 的元素。
+
 + `cross_sum` 是包含左右子数组且含索引 `(left + right) / 2` 的最大值。
 
 <img src="https://pic.leetcode-cn.com/3aa2128a7ddcf1123454a6e5364792490c5edff62674f3cfd9c81cb7b5e8e522-file_1576478143567" alt="在这里插入图片描述" style="zoom:50%;" />
@@ -1691,8 +1559,6 @@ class Solution {
 }
 ```
 
-
-
 ### 8、字符串转换成整数
 
 规则
@@ -1714,13 +1580,9 @@ class Solution {
      因此返回 INT_MIN (−231) 。
 ```
 
-
-
 **解析**
 
 考验的是边界条件的周全程度
-
-
 
 **答案**
 
@@ -1766,8 +1628,6 @@ public int myAtoi(String str) {
         }
 ```
 
-
-
 ### 10、正则表达式匹配
 
 给你一个字符串 `s` 和一个字符规律 `p`，请你来实现一个支持 `'.'` 和 `'*'` 的正则表达式匹配。
@@ -1791,8 +1651,6 @@ p = "c*a*b"
 输出: true
 解释: 因为 '*' 表示零个或多个，这里 'c' 为 0 个, 'a' 被重复一次。因此可以匹配字符串 "aab"。
 ```
-
-
 
 **解析**
 
@@ -1861,8 +1719,6 @@ class Solution {
 }
 ```
 
-
-
 动态规划
 
 我们通过用 `dp(i,j)`表示 `text[i:] `和 `pattern[j:] `是否能匹配。我们可以用更短的字符串匹配问题来表示原本的问题
@@ -1895,10 +1751,6 @@ class Solution {
 }
 ```
 
-
-
-
-
 ## 链表
 
 ### 142.环形链表
@@ -1912,8 +1764,6 @@ class Solution {
 输出：tail connects to node index 1
 解释：链表中有一个环，其尾部连接到第二个节点。
 ```
-
-
 
 **答案**
 
@@ -1952,8 +1802,6 @@ public ListNode detectCycle(ListNode head) {
 }
 ```
 
-
-
 ### 160、相交链表
 
 编写一个程序，找到两个单链表相交的起始节点。
@@ -1963,8 +1811,6 @@ public ListNode detectCycle(ListNode head) {
 [<img src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/12/14/160_statement.png" alt="img" style="zoom:50%;" />](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/12/14/160_statement.png)
 
 在节点 c1 开始相交。
-
-
 
 **解析**
 
@@ -2039,25 +1885,17 @@ public class Solution {
 }
 ```
 
-
-
 ### 24、两两交换链表中的节点
 
 给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
 
 **你不能只是单纯的改变节点内部的值**，而是需要实际的进行节点交换
 
-
-
 **解析**
-
-
 
 **答案**
 
 通解，反转k个节点
-
-
 
 ```java
 public ListNode swapPairs(ListNode head){
@@ -2113,8 +1951,6 @@ public ListNode swapPairs(ListNode head){
 + 下一次递归则是传递的是下一对需要交换的节点。若链表中还有节点，则继续递归。
 + 交换了两个节点以后，返回 `secondNode`，因为它是交换后的新头。
 + 在所有节点交换完成以后，我们返回交换后的头，实际上是原始链表的第二个节点。
-
-
 
 ```java
 class Solution {
@@ -2184,8 +2020,6 @@ public ListNode swapPairs(ListNode head) {
     }
 ```
 
-
-
 ### 28、实现strStr()
 
 给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。
@@ -2200,8 +2034,6 @@ public ListNode swapPairs(ListNode head) {
 **解析**
 
 这属于字符串匹配问题，可以想到KMP算法
-
-
 
 **答案**
 
@@ -2244,14 +2076,12 @@ RK算法
 算法核心：计算滚动哈希值，将待匹配的字符串的哈希值和主串进行比较
 
 + 滚动哈希的算法
-
-  哈希的算法和上一个字符串有关，因此来降低算法的是时间复杂度
-
-  计算公式：
-
-  ![image-20200531105130272](Page2/image-20200531105130272.png)
-
   
+  哈希的算法和上一个字符串有关，因此来降低算法的是时间复杂度
+  
+  计算公式：
+  
+  ![image-20200531105130272](Page2/image-20200531105130272.png)
 
 + 主串从0开始遍历到(Len-N)，计算哈希值和匹配串比较
 
@@ -2283,7 +2113,7 @@ RK算法
         for(int i =1;i<=N;i++){
             aN = (aN *a) % module;
         }
-		//移动字符串，减掉移出的，添加新增的
+        //移动字符串，减掉移出的，添加新增的
         for(int start =1;start<L-N+1;start++){
             h = (h * a - charToInt(start - 1, haystack) * aN
                     + charToInt(start + N - 1, haystack)) % module;
@@ -2299,8 +2129,6 @@ RK算法
     }
 ```
 
-
-
 KMP算法
 
 + 不打算手写，但是要掌握思想
@@ -2315,8 +2143,6 @@ KMP算法
 输入: 123
 输出: 321
 ```
-
-
 
 **解析**
 
@@ -2358,8 +2184,6 @@ class Solution {
 }
 ```
 
-
-
 ### 9、回文数
 
 判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
@@ -2369,8 +2193,6 @@ class Solution {
 输出: false
 解释: 从左向右读, 为 -121 。 从右向左读, 为 121- 。因此它不是一个回文数。
 ```
-
-
 
 **解析**
 
@@ -2406,8 +2228,6 @@ class Solution {
 }
 ```
 
-
-
 翻转操作
 
 + 每次进行取余操作 （ `%10`），取出最低的数字：`y = x % 10·`
@@ -2415,8 +2235,6 @@ class Solution {
 + 每取一个最低位数字，`x` 都要自除以` 10`
 + 判断 x 是不是小于 `revertNum` ，当它小于的时候，说明数字已经对半或者过半了
 + 最后，判断奇偶数情况：如果是偶数的话，`revertNum` 和 `x` 相等；如果是奇数的话，最中间的数字就在`revertNum` 的最低位上，将它除以 `10` 以后应该和 `x` 相等。
-
-
 
 ```java
 class Solution {
@@ -2434,8 +2252,6 @@ class Solution {
 }
 ```
 
-
-
 ### 12、整数转罗马数字
 
 ```java
@@ -2448,8 +2264,6 @@ C             100
 D             500
 M             1000
 ```
-
-
 
 **解析**
 
@@ -2483,8 +2297,6 @@ public class Solution {
     }
 }
 ```
-
-
 
 ### 13、罗马数字转整数
 
@@ -2525,8 +2337,6 @@ public static int romanToInt(String s){
     }
 ```
 
-
-
 ### 16、最接近的三数之和
 
 给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。
@@ -2544,8 +2354,6 @@ public static int romanToInt(String s){
 二分的作用是减少不必要的判断，是一种剪枝
 
 **答案**
-
-
 
 ```java
 class Solution {
@@ -2573,11 +2381,7 @@ class Solution {
 }
 ```
 
-
-
 ### 18、四数之和
-
-
 
 **解析**
 
@@ -2601,7 +2405,7 @@ public List<List<Integer>> fourSum(int[] nums,int target){
         }
         /*对数组进行从小到大排序*/
         Arrays.sort(nums);
-  
+
             int length=nums.length;
             /*定义4个指针k，i，j，h  k从0开始遍历，i从k+1开始遍历，留下j和h，j指向i+1，h指向数组最大值*/
         for(int k=0;k<length-3;k++){
@@ -2622,7 +2426,7 @@ public List<List<Integer>> fourSum(int[] nums,int target){
             }
             /*第二层循环i，初始值指向k+1*/
             for(int i=k+1;i<length-2;i++){
-             
+
                //注意这里，防止第一个相同元素被清理
                 if(i>k+1&&nums[i]==nums[i-1]){
                     continue;
@@ -2669,8 +2473,6 @@ public List<List<Integer>> fourSum(int[] nums,int target){
     }
 ```
 
-
-
 ### 29、两数相除
 
 给定两个整数，被除数 `dividend` 和除数 `divisor`。将两数相除，要求不使用乘法、除法和 `mod` 运算符。
@@ -2683,10 +2485,7 @@ public List<List<Integer>> fourSum(int[] nums,int target){
 输入: dividend = 10, divisor = 3
 输出: 3
 解释: 10/3 = truncate(3.33333..) = truncate(3) = 3
-
 ```
-
-
 
 **解析**
 
@@ -2708,7 +2507,6 @@ public List<List<Integer>> fourSum(int[] nums,int target){
 所以循环下来，当`n=5`时，`100/32=3`, 刚好是大于等于3的，这时我们将`100-32*3=4`，也就是减去了`32`个`3`，接下来我们再处理`4`，同样手法可以再减去一个`3`
 
  所以一共是减去了`33`个`3`，所以商就是``33`
-
 
 ```java
     public int divide_bit(int dividend, int divisor) {
@@ -2741,8 +2539,6 @@ public List<List<Integer>> fourSum(int[] nums,int target){
     }
 ```
 
-
-
 2.常规思路加减法
 
 核心逻辑和位运算是一样的，只是使用了递归的方法
@@ -2773,7 +2569,7 @@ public List<List<Integer>> fourSum(int[] nums,int target){
         //使用long强制转型
         long a = (long)dividend > 0? (long) dividend : -(long)dividend;
         long b =(long) divisor >0 ? (long)divisor:-(long) divisor;
-        
+
         long result = div(a,b);
         System.out.println("result:"+result);
         return (int) (signed ==1? result :-result);
@@ -2797,8 +2593,6 @@ public List<List<Integer>> fourSum(int[] nums,int target){
     }
 ```
 
-
-
 ## 动态规划专题
 
 ![img](https://pic.leetcode-cn.com/1088cea13c1221751bf6c5ac56452b19096d673c881a52b062fd291ead85d04a-%E3%80%8C%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E3%80%8D%E9%97%AE%E9%A2%98%E7%9A%84%E6%80%9D%E8%80%83%E6%96%B9%E5%90%91.png)
@@ -2810,18 +2604,16 @@ public List<List<Integer>> fourSum(int[] nums,int target){
 + 思考状态转移方程，**技巧是分类讨论。对状态空间进行分类，思考最优子结构到底是什么。即大问题的最优解如何由小问题的最优解得到。**
 
 + 思考初始化
-
+  
   角度 1：直接从状态的语义出发；
-
+  
   角度 2：如果状态的语义不好思考，就考虑“状态转移方程”的边界需要什么样初始化的条件；
-
+  
   角度 3：从“状态转移方程”方程的下标看是否需要多设置一行、一列表示“哨兵”，这样可以避免一些边界的讨论，使得代码变得比较短。
 
 + 思考输出
 
 + 思考状态压缩
-
-
 
 ## 二分查找专题
 
@@ -2867,8 +2659,6 @@ public List<List<Integer>> fourSum(int[] nums,int target){
     }
 ```
 
-
-
 ### 34、在排序数组中查找元素的第一个和最后一个位置
 
 给定一个按照升序排列的整数数组 `nums`，和一个目标值 `target`。找出给定目标值在数组中的开始位置和结束位置。
@@ -2883,8 +2673,6 @@ public List<List<Integer>> fourSum(int[] nums,int target){
 ```
 
 **解析**
-
-
 
 **答案**
 
@@ -2959,8 +2747,6 @@ public int[] searchRange(int[] nums,int target){
 }
 ```
 
-
-
 ### 33、搜索旋转排序数组
 
 假设按照升序排序的数组在预先未知的某个点上进行了旋转。
@@ -2977,8 +2763,6 @@ public int[] searchRange(int[] nums,int target){
 输入: nums = [4,5,6,7,0,1,2], target = 0
 输出: 4
 ```
-
-
 
 **答案**
 
@@ -3011,10 +2795,6 @@ public static int search(int[] nums, int target) {
     return -1;
 }
 ```
-
-
-
-
 
 ### 81、旋转排序数组Ⅱ
 
@@ -3077,10 +2857,6 @@ public boolean search(int[] nums, int target) {
     }
 ```
 
-
-
-
-
 ### 153、寻找旋转排序数组中的最小值
 
 假设按照升序排序的数组在预先未知的某个点上进行了旋转。
@@ -3090,8 +2866,6 @@ public boolean search(int[] nums, int target) {
 请找出其中最小的元素。
 
 **你可以假设数组中不存在重复元素。**
-
-
 
 **解析**
 
@@ -3123,8 +2897,6 @@ public boolean search(int[] nums, int target) {
     }
 }
 ```
-
-
 
 ### 154、寻找旋转排序数组中的最小值Ⅱ
 
@@ -3163,10 +2935,6 @@ public int findMin(int[] nums) {
     }
 ```
 
-
-
-
-
 ### 300.最长上升子序列
 
 给定一个无序的整数数组，找到其中最长上升子序列的长度。
@@ -3186,8 +2954,6 @@ public int findMin(int[] nums) {
 
 **进阶:** 你能将算法的时间复杂度降低到 O(*n* log *n*) 吗?
 
-
-
 **答案**
 
 **动态规划**
@@ -3201,7 +2967,7 @@ public int findMin(int[] nums) {
 1. **定义状态**  `dp[i]` 表示**以 `nums[i]` 结尾**的「上升子序列」的长度
 
 2. **考虑状态转移方程**   
-
+   
    <img src="../../../ZZZ_files/学习/算法/Leetcode题解心得/image-20200427103029475.png" alt="image-20200427103029475" style="zoom: 80%;" />
 
 3. **考虑初始化**  `dp[i] = 1`，11 个字符显然是长度为 11 的上升子序列。
@@ -3235,8 +3001,6 @@ public class Solution {
 }
 ```
 
-
-
 **贪心+二分**
 
 > 考虑一个简单的贪心，如果我们要使上升子序列尽可能的长，则我们需要让序列上升得尽可能慢，因此我们希望每次在上升子序列最后加上的那个数尽可能的小。
@@ -3261,13 +3025,9 @@ public class Solution {
 
 + 返回 res ，即最长上升子子序列长度。
 
-
-
 > 自我解读
->
-> 只要比尾部大说明可以继续成为连续数组，二分的作用就是遍历数组看是不是这个数比尾部都大
->
 > 
+> 只要比尾部大说明可以继续成为连续数组，二分的作用就是遍历数组看是不是这个数比尾部都大
 
 ```java
 class Solution {
@@ -3303,8 +3063,6 @@ h 指数的定义: “h 代表“高引用次数”（high citations），一名
 解释: 给定数组表示研究者总共有 5 篇论文，每篇论文相应的被引用了 0, 1, 3, 5, 6 次。
      由于研究者有 3 篇论文每篇至少被引用了 3 次，其余两篇论文每篇被引用不多于 3 次，所以她的 h 指数是 3。
 ```
-
-
 
 **答案**
 
@@ -3364,8 +3122,6 @@ public int hIndex(int[] citations) {
 
 如果不存在这样的下标 `index`，就请返回 -1。
 
-
-
 何为山脉数组？如果数组 A 是一个山脉数组的话，那它满足如下条件：
 
 **首先**，`A.length >= 3`
@@ -3374,7 +3130,6 @@ public int hIndex(int[] citations) {
 
 + `A[0] < A[1] < ... A[i-1] < A[i]`
 + `A[i] > A[i+1] > ... > A[A.length - 1]`
-
 
 你将 不能直接访问该山脉数组，必须通过 `MountainArray `接口来获取数据：
 
@@ -3392,12 +3147,9 @@ public int hIndex(int[] citations) {
 输入：array = [1,2,3,4,5,3,1], target = 3
 输出：2
 解释：3 在数组中出现了两次，下标分别为 2 和 5，我们返回最小的下标 2。
-
 ```
 
 **解析**
-
-
 
 **答案**
 
@@ -3481,7 +3233,7 @@ class Solution {
 
         }
         // 因为不确定区间收缩成 1个数以后，这个数是不是要找的数，因此单独做一次判断
-       
+
     }
 
     private int findFromInversedArr(MountainArray mountainArr, int l, int r, int target) {
@@ -3515,10 +3267,6 @@ class Solution {
 }
 ```
 
-
-
-
-
 ### 69、平方根
 
 实现 int sqrt(int x) 函数。
@@ -3534,14 +3282,10 @@ class Solution {
      由于返回类型是整数，小数部分将被舍去。
 ```
 
-
-
 **解析**
 
 + right可以取x/2开始
 + 
-
-
 
 **答案**
 
@@ -3568,10 +3312,6 @@ public int sqrt(int x){
 }
 ```
 
-
-
-
-
 **牛顿迭代法**
 
 ![image-20200507182434552](Page2/image-20200507182434552.png)
@@ -3589,8 +3329,6 @@ public class Solution {
 }
 ```
 
-
-
 ### 287、寻找重复数
 
 给定一个包含 n + 1 个整数的数组 nums，其数字都在 1 到 n 之间（包括 1 和 n），可知至少存在一个重复的整数。假设只有一个重复的整数，找出这个重复的数。
@@ -3600,7 +3338,7 @@ public class Solution {
 输出: 2
 ```
 
-​	
+​    
 
 **解析**
 
@@ -3608,11 +3346,7 @@ public class Solution {
 
 注意二分的目标
 
-
-
 **答案**
-
-
 
 **二分法**
 
@@ -3630,7 +3364,7 @@ public class Solution {
         while (left < right) {
             // 在 Java 里可以这么用，当 left + right 溢出的时候，无符号右移保证结果依然正确
             int mid = (left + right) >>> 1;
-            
+
             int cnt = 0;
             for (int num : nums) {
                 if (num <= mid) {
@@ -3649,12 +3383,6 @@ public class Solution {
     }
 }
 ```
-
-
-
-
-
-
 
 ### 374、猜数字
 
@@ -3675,8 +3403,6 @@ public class Solution {
 输入: n = 10, pick = 6
 输出: 6
 ```
-
-
 
 **解析**
 
@@ -3721,8 +3447,6 @@ public class Solution extends GuessGame {
 }
 ```
 
-
-
 ### 278、第一个错误版本
 
 你是产品经理，目前正在带领一个团队开发新的产品。不幸的是，你的产品的最新版本没有通过质量检测。由于每个版本都是基于之前的版本开发的，所以错误的版本之后的所有版本都是错的。
@@ -3740,8 +3464,6 @@ public class Solution extends GuessGame {
 
 所以，4 是第一个错误的版本。 
 ```
-
-
 
 **答案**
 
@@ -3802,11 +3524,7 @@ m = 2
 因为此时这两个子数组各自的和的最大值为18，在所有情况中最小
 ```
 
-
-
 **答案**
-
-
 
 **动态规划**
 
@@ -3844,8 +3562,6 @@ public int splitArray2(int[] nums, int m) {
 时间复杂度： O(n^2 * m)
 
 空间复杂度： O(n * m)
-
-
 
 二分+贪心
 
@@ -3890,10 +3606,6 @@ public int splitArray2(int[] nums, int m) {
     }
 ```
 
-
-
-
-
 ### 658、找到k个最接近的元素
 
 给定一个排序好的数组，两个整数 k 和 x，从数组中找到最靠近 x（两数之差最小）的 k 个数。返回的结果必须要是按升序排好的。如果有两个数与 x 的差值一样，优先选择数值较小的那个数。
@@ -3902,8 +3614,6 @@ public int splitArray2(int[] nums, int m) {
 输入: [1,2,3,4,5], k=4, x=3
 输出: [1,2,3,4]
 ```
-
-
 
 **答案**
 
@@ -3960,14 +3670,7 @@ public List<Integer> findClosestElements(int[] arr, int k, int x) {
         }
         return res;
     }
-
 ```
-
-
-
-
-
-
 
 ### 875、爱吃香蕉的珂珂
 
@@ -3984,14 +3687,11 @@ public List<Integer> findClosestElements(int[] arr, int k, int x) {
 输出: 4
 ```
 
-
-
 **答案**
 
 + 速度越小，耗时越多；
 + 搜索的是速度。因为题目限制了珂珂一个小时之内只能选择一堆香蕉吃，因此速度最大值就是这几堆香蕉中，数量最多的那一堆。速度的最小值是 1（其实还可以再分析一下下界是多少）
 + 还是因为珂珂一个小时之内只能选择一堆香蕉吃，因此：每堆香蕉吃完的耗时 = 这堆香蕉的数量 / 珂珂一小时吃香蕉的数量，这里的 / 在不能整除的时候，需要上取整。
-
 
 ```java
 public class Solution {
@@ -4041,12 +3741,6 @@ public class Solution {
 }
 ```
 
-
-
-
-
-
-
 ### 1300、转变数组后最接近目标值的数组和
 
 给你一个整数数组 arr 和一个目标值 target ，请你返回一个整数 value ，使得将数组中所有大于 value 的值变成 value 后，数组的和最接近  target （最接近表示两者之差的绝对值最小）。
@@ -4059,12 +3753,7 @@ public class Solution {
 输入：arr = [4,9,3], target = 10
 输出：3
 解释：当选择 value 为 3 时，数组会变成 [3, 3, 3]，和为 9 ，这是最接近 target 的方案。
-
 ```
-
-
-
-
 
 **答案**
 
@@ -4072,7 +3761,7 @@ public class Solution {
 
 ```java
 public class Solution {
-    
+
     public int findBestValue(int[] arr, int target) {
         int left = 0;
         int right = 10_0000;
@@ -4109,11 +3798,7 @@ public class Solution {
 }
 ```
 
-
-
 ## 回溯专题
-
-
 
 [回溯大法](https://leetcode-cn.com/problems/permutations/solution/hui-su-suan-fa-python-dai-ma-java-dai-ma-by-liweiw/)
 
@@ -4168,7 +3853,7 @@ class Solution {
             for(int i =0;i<len;i++){
                 if(!used[i]){
                     //添加新的列表，每一层遍历都是新的列表，就不需要回溯
-                   		List<Integer> newPath = new ArrayList<>(path);
+                           List<Integer> newPath = new ArrayList<>(path);
                         newPath.add(nums[i]);
 
                         boolean[] newUsed = new boolean[len];
@@ -4205,8 +3890,6 @@ class Solution {
 输出：["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
 ```
 
-
-
 **答案**
 
 因为不是全排列，所以用不上used数组
@@ -4228,7 +3911,7 @@ class Solution {
     };
      List<String> res = new ArrayList<String>();
     public List<String> letterCombinations(String digits) {
-       
+
          StringBuilder path = new StringBuilder();
         //没有使用，因为字母不会重复（不是全排列）
       //  boolean[] used = new boolean[digits.length()];  
@@ -4259,8 +3942,6 @@ class Solution {
     }
 }
 ```
-
-
 
 ### 22、括号生成
 
@@ -4304,7 +3985,6 @@ class Solution {
             backtrack(ans, cur+")", open, close+1, max);
     }
 }
-
 ```
 
 闭合数
@@ -4324,10 +4004,7 @@ class Solution {
         return ans;
     }
 }
-
 ```
-
-
 
 ### 39、组合总和
 
@@ -4348,7 +4025,6 @@ candidates 中的数字可以无限制重复被选取。
   [7],
   [2,2,3]
 ]
-
 ```
 
 ```
@@ -4361,8 +4037,6 @@ candidates 中的数字可以无限制重复被选取。
   [3,5]
 ]
 ```
-
-
 
 **答案**
 
@@ -4416,8 +4090,6 @@ public class Solution {
 }
 ```
 
-
-
 ### 40、组合总和Ⅱ
 
 给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
@@ -4453,8 +4125,6 @@ candidates 中的每个数字在每个组合中只能使用一次。
 “解集不能包含重复的组合”，就提示我们得对数组先排个序（“升序”或者“降序”均可，下面示例中均使用“升序”）。
 “candidates 中的每个数字在每个组合中只能使用一次”，那就按照顺序依次减去数组中的元素，递归求解即可：遇到 00 就结算且回溯，遇到负数也回溯。
 candidates 中的数字可以重复，可以借助「力扣」第 47 题：“全排列 II” 的思想，在搜索的过程中，找到可能发生重复结果的分支，把它剪去。
-
-
 
 **答案**
 
@@ -4534,10 +4204,7 @@ public class Solution {
   ".Q.."]
 ]
 解释: 4 皇后问题存在两个不同的解法。
-
 ```
-
-
 
 **答案**
 
@@ -4551,7 +4218,7 @@ class Solution {
         calnQueens(0, n, result);
         return output;
     }
-    
+
     // n 皇后问题 row代表计算到了到第row行
     private static void calnQueens(int row, int n, int[] result){
         if (row == n){
@@ -4571,7 +4238,7 @@ class Solution {
             // 不满足要求 回溯下一列 对应操作column++
         }
     }
-    
+
     // row代表行数 column代表列数 result代表满足规则的棋子在第n行中的位置
     private static boolean isOK(int row, int column, int[] result){
         // 判断棋子的位置是否正确 不正确返回false
@@ -4585,7 +4252,7 @@ class Solution {
         }
         return true;
     }
-    
+
     private static void getPrint(int[] result){
         List<String> one = new ArrayList<>();
         for (int row = 0; row < result.length; row++){
@@ -4604,8 +4271,6 @@ class Solution {
     }
 }
 ```
-
-
 
 ### 60、第K个排列
 
@@ -4644,8 +4309,6 @@ class Solution {
 3、如果 k 小于等于这一个分支将要产生的叶子结点数，那说明所求的全排列一定在这一个分支将要产生的叶子结点里，需要递归求解；
 
 4、计算阶乘的时候，你可以使用循环计算，特别注意：0!=10!=1，它表示了没有数可选的时候，即表示到达叶子结点了，排列数只剩下 11 个；
-
-
 
 **答案**
 
@@ -4719,10 +4382,6 @@ public class Solution {
 }
 ```
 
-
-
-
-
 ### 77、组合
 
 示例:
@@ -4740,13 +4399,11 @@ public class Solution {
 ]
 ```
 
-
-
 **答案**
 
 ![image.png](https://pic.leetcode-cn.com/3ddd55697423b5831cbbd42f4b901ebbade0daa456c651a70c758fe359d8a0d1-image.png)
 
-```		java
+```java
 public class Solution {
 
     private List<List<Integer>> res = new ArrayList<>();
@@ -4779,10 +4436,6 @@ public class Solution {
 }
 ```
 
-
-
-
-
 ### 78、子集
 
 给定一组**不含重复元素**的整数数组 *nums*，返回该数组所有可能的子集（幂集）。
@@ -4803,10 +4456,6 @@ public class Solution {
   []
 ]
 ```
-
-
-
-
 
 **答案**
 
@@ -4841,8 +4490,6 @@ public class Solution {
     }
 }
 ```
-
-
 
 在回溯中记录深度
 
@@ -4883,8 +4530,6 @@ public class Solution {
 }
 ```
 
-
-
 ### 79、子集Ⅱ
 
 给定一个可能包含重复元素的整数数组 ***nums***，返回该数组所有可能的子集（幂集）。
@@ -4903,8 +4548,6 @@ public class Solution {
   []
 ]
 ```
-
-
 
 **答案**
 
@@ -4931,12 +4574,7 @@ public class Solution {
         }
     }
 }
-
 ```
-
-
-
-
 
 ### 93、复制IP地址
 
@@ -4946,8 +4584,6 @@ public class Solution {
 输入: "25525511135"
 输出: ["255.255.11.135", "255.255.111.35"]
 ```
-
-
 
 **解析**
 
@@ -4968,8 +4604,6 @@ public class Solution {
 + path：记录从根结点到叶子结点的一个路径（回溯算法常规变量，是一个栈）；
 + res：记录结果集的变量，常规变量。
   总结：这个问题思想不难，但是细节比较繁琐，什么时候递归终止，如何手动截取字符串，再转换成 int 类型，还有如何在中间结点发现可以剪枝，这些细节需要在编码的时候考虑清楚。
-
-
 
 **答案**
 
@@ -5036,8 +4670,6 @@ public class Solution {
 }
 ```
 
-
-
 ### 784、字母大小全排列
 
 给定一个字符串`S`，通过将字符串`S`中的每个字母转变大小写，我们可以获得一个新的字符串。返回所有可能得到的字符串集合。
@@ -5054,8 +4686,6 @@ public class Solution {
 输出: ["12345"]
 ```
 
-
-
 **答案**
 
 #### 技巧：使用异或运算转换字母大小写
@@ -5069,8 +4699,6 @@ public class Solution {
 2、如果字符是大写字符，加上 32 得到小写字符。
 
 而这两者合并起来，就是给这个字符做一次不进位的加法，即异或上 `1 << 5`
-
-
 
 **为什么不需要回溯删除?**
 
@@ -5109,10 +4737,6 @@ public class Solution {
 }
 ```
 
-
-
-
-
 ## 时间效率
 
 ### 432、全O(1)的数据结构
@@ -5125,8 +4749,6 @@ public class Solution {
 + GetMinKey() - 返回 key 中值最小的任意一个。如果没有元素存在，返回一个空字符串""。
 + 挑战：以 O(1) 的时间复杂度实现所有操作。
 
-
-
 **答案**
 
 ```java
@@ -5136,22 +4758,22 @@ class AllOne {
     public AllOne() {
 
     }
-    
+
     /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
     public void inc(String key) {
 
     }
-    
+
     /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
     public void dec(String key) {
 
     }
-    
+
     /** Returns one of the keys with maximal value. */
     public String getMaxKey() {
 
     }
-    
+
     /** Returns one of the keys with Minimal value. */
     public String getMinKey() {
 
@@ -5167,8 +4789,6 @@ class AllOne {
  * String param_4 = obj.getMinKey();
  */
 ```
-
-
 
 ## 头条
 
@@ -5198,8 +4818,6 @@ class AllOne {
 输出："/home/foo"
 解释：在规范路径中，多个连续斜杠需要用一个斜杠替换。
 ```
-
-
 
 **答案**
 
@@ -5237,8 +4855,6 @@ class AllOne {
         }
 ```
 
-
-
 ### 15、三数之和
 
 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
@@ -5255,11 +4871,7 @@ class AllOne {
 ]
 ```
 
-
-
 **解析**
-
-
 
 **答案**
 
@@ -5306,10 +4918,6 @@ public List<List<Integer>> threeSum(int[] nums){
     }
 ```
 
-
-
-
-
 ### 42、接雨水
 
 给定 *n* 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
@@ -5320,8 +4928,6 @@ public List<List<Integer>> threeSum(int[] nums){
 输入: [0,1,0,2,1,0,1,3,2,1,2,1]
 输出: 6
 ```
-
-
 
 **答案**
 
@@ -5360,8 +4966,6 @@ public int trap(int[] height) {
 }
 ```
 
-
-
 ### 148、链表排序
 
 在 O(n log n) 时间复杂度和常数级空间复杂度下，对链表进行排序。
@@ -5388,7 +4992,7 @@ public ListNode sortList(ListNode head) {
     ListNode slow = head, fast = head;
     while (fast.next != null && fast.next.next != null) {
         fast = fast.next.next;
-        
+
         slow = slow.next;
     }
 
@@ -5444,17 +5048,9 @@ private ListNode merge(ListNode l1, ListNode l2) {
 }
 ```
 
-
-
-
-
 ### 69、x的平方根
 
-
-
 **答案**
-
-
 
 **牛顿迭代法**
 
@@ -5494,8 +5090,6 @@ class Solution {
   }
 }
 ```
-
-
 
 ### 23、合并k个有序链表
 
@@ -5551,13 +5145,11 @@ public ListNode mergeKLists(ListNode[] lists) {
         head.next = cur;
         head = head.next;
     }
-		//注意这句，防止循环链表发生
+        //注意这句，防止循环链表发生
     head.next = null;
     return res.next;
 }
 ```
-
-
 
 **分治思想**
 
@@ -5615,8 +5207,6 @@ class Solution {
 }
 ```
 
-
-
 ### 236、二叉树的最近公共祖先
 
 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
@@ -5635,8 +5225,6 @@ class Solution {
 2. 从头开始遍历两个节点的路径，找到最后一个相等的节点
 
 **解析**
-
-
 
 **答案**
 
@@ -5684,7 +5272,7 @@ private void findNodePath(LinkedList<TreeNode> path, TreeNode root, TreeNode tar
     }
 
     findNodePath(path, root.right, target);
-	//注意这里，每一层遍历结束需要回溯list
+    //注意这里，每一层遍历结束需要回溯list
     if (!path.isEmpty() && path.getLast().val != target.val) {
         path.removeLast();
     }
@@ -5714,11 +5302,11 @@ class Solution {
         //与left那个同理
         if(right!=null&&right!=q&&right!=p)
             return right;
-            
+
         //一个为p一个为q，肯定要返回root，因为root就是最近公共节点
         if(left!=null&&right!=null)
             return root;
-        
+
         return left==null?right:left;
     }
 }
@@ -5782,8 +5370,6 @@ class Solution {
 
 }
 ```
-
-
 
 **无父节点的迭代**
 
@@ -5894,10 +5480,6 @@ class Solution {
 }
 ```
 
-
-
-
-
 [**Tarjan(离线)算法**](https://www.luogu.com.cn/blog/hulean/suan-fa-yang-xie-zhi-zui-jin-gong-gong-zu-xian-lca)
 
 1. 任选一个点为根节点，从根节点开始。
@@ -5906,8 +5488,6 @@ class Solution {
 4. 合并v到u上。
 5. 寻找与当前点u有询问关系的点v。
 6. 若是v已经被访问过了，则可以确认u和v的最近公共祖先为v被合并到父亲节点a
-
-
 
 ### 235、二叉搜索树的最近公共祖先
 
@@ -5925,8 +5505,6 @@ class Solution {
 解释: 节点 2 和节点 8 的最近公共祖先是 6。
 ```
 
-
-
 **答案**
 
 + 从根节点开始遍历树
@@ -5940,7 +5518,7 @@ class Solution{
         int  parentVal = root.val;
         int pVal = p.val;
         int qVal = q.val;
-        
+
         if(pVal > parentVal && qVal > parentVal){
             return lowestCommonAncestor(root.right,p,q);
         }else if(pVal < parentVal && qVal < parentVal){
@@ -5951,8 +5529,6 @@ class Solution{
     }
 }
 ```
-
-
 
 ### 121、买卖股票的最佳时机
 
@@ -5988,8 +5564,6 @@ public int maxProfit(int[] prices) {
 }
 ```
 
-
-
 ### 122、买卖股票的最佳时机Ⅱ
 
 给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
@@ -6024,8 +5598,6 @@ public int  maxProfit(int[] prices){
         return res;
     }
 ```
-
-
 
 ### 123、买卖股票的最佳时机Ⅲ
 
@@ -6077,8 +5649,6 @@ public int maxProfit(int[] prices){
     return Math.max(Math.max(dp[n-1][0],dp[n-1][2]),dp[n-1][4]);
 }
 ```
-
-
 
 ### 393、验证UTF-8
 
@@ -6161,10 +5731,6 @@ class Solution {
 }
 ```
 
-
-
-
-
 # 面试选题
 
 ## 726.原子的数量
@@ -6218,7 +5784,7 @@ public String countOfAtoms(String formula){
             stack.peek().put(name,stack.peek().getOrDefault(name,0)+multiplicity);
         }
     }
-    
+
     StringBuilder builder = new StringBuilder();
     for(String name : stack.peek().keySet()){
         builder.append(name);
@@ -6230,33 +5796,28 @@ public String countOfAtoms(String formula){
 } 
 ```
 
-
-
 ## 给定数组AB，求A-B
 
-
-
-## 编写出1000000以内的素数 
+## 编写出1000000以内的素数
 
 暴力法，不适合大数据
 
 ```java
 public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		int i,j;
-		int num;
-		for(i=1;i<=1000;i++)
-		{
-			for(j=2;j<i;j++)
-			{
-				if(i%j==0)
-					break;
-			}
-			if(i==j)
-				System.out.print(j+" ");			
-		}
-	}
-
+        // TODO Auto-generated method stub
+        int i,j;
+        int num;
+        for(i=1;i<=1000;i++)
+        {
+            for(j=2;j<i;j++)
+            {
+                if(i%j==0)
+                    break;
+            }
+            if(i==j)
+                System.out.print(j+" ");            
+        }
+    }
 ```
 
 2.平方根优化法
@@ -6282,15 +5843,11 @@ public boolean is(int n){
 
 3.多线程优化法
 
-
-
 ## 乱序的 1-100，少了一个数，把少的那个找出来
 
 使用bitMap存储，查找的时候遍历一遍，是节约内存的做法
 
 置换法，每个数和数组下标对应
-
-
 
 ## 每k组一反转
 
@@ -6343,18 +5900,10 @@ public Node reverseKGroup(Node head, int k) {
     }
 ```
 
-
-
-
-
-
-
 ## n个珠子m种颜色，包含全部m种颜色的最短子串长度
 
 有一串珠子首尾不相连，总共N个，这些珠子总共有M种颜色，在这串珠子里面找到最短的连续珠子子串，使子串出现所有的M种颜色。
 毫无疑问，这个可以用暴力破解，N^2 时间效率可以解决，面试官百分之一千会让你优化。
-
-
 
 ## 二叉树最远节点之间的距离
 
@@ -6389,15 +5938,9 @@ private int maxLen = 0;
         }
 ```
 
-
-
 ## 倒水问题
 
 装满水的10升的杯子、空的7升杯子和3升杯子，3个杯子中都没有刻度。在不使用其他 道具的情况下，是否可以量出5升的水呢？
-
-
-
-
 
 ## 365、水壶问题
 
@@ -6416,14 +5959,10 @@ private int maxLen = 0;
 输出: True
 ```
 
-
-
 **解析**
 
 1. 广度优先遍历，关键是搞清楚所有的状态，然后每个状态遍历过去
 2. 总结规律，相当于取余运算法
-
-
 
 **答案**
 
@@ -6598,10 +6137,10 @@ public boolean canMeasureWater(int x,int y,int z){
 
             // 从当前状态获得所有可能的下一步的状态
             List<State> nextStates = getNextStates(curX, curY, x, y);
-            
+
             // 打开以便于观察，调试代码
             // System.out.println(head + " => " + nextStates);
-            
+
             for (State nextState : nextStates) {
                 if (!visited.contains(nextState)) {
                     queue.offer(nextState);
@@ -6770,8 +6309,6 @@ public boolean canMeasureWater(int x,int y,int z){
     }
 ```
 
-
-
 ## 三个杯子倒水问题
 
 三个杯子，其中一个杯子满水，相互倒水，求是否能得到一个指定的结果
@@ -6787,15 +6324,11 @@ public boolean canMeasureWater(int x,int y,int z){
 
 依然是广度遍历算法+状态
 
-
-
 **答案**
 
 ```java
 
 ```
-
-
 
 ## 大数相加
 
@@ -6804,89 +6337,87 @@ public boolean canMeasureWater(int x,int y,int z){
 ```java
 public class Test {
 private static String calculate(String str) {
-	String data="";//data用来存放最后计算的结果
-	String[] split = str.split("\\+");//按照+号将字符串分隔
-	if(split.length!=2){
-		System.out.println("输入有误");
-		return "输入有误 ，无返回值";
-	}
-	int index1=split[0].length()-1;//存第一个数组里面字符串的长度
-	int index2=split[1].length()-1;//存第二个数组里面字符串的长度
-	String str1=split[0];//将字符串拿出来转换为字符数组
-	char[] charArray1 = str1.toCharArray();
-	String str2=split[1];
-	char[] charArray2 = str2.toCharArray();
-	/**
-	 * 始终让第一个字符串的长度大于等于第二个字符串
-	 */
-	if(index1<index2){
-		int temp=index1;
-		index1=index2;
-		index2=temp;
-		
-		char [] aa=charArray1;
-		charArray1=charArray2;
-		charArray2=aa;
-	}
-		int left=0;//这个标记用于向上进位，初始值为0
-		while(index2>=0){
-			  int sum=0;//末尾两个数相加
-			  int a1=(int)(charArray1[index2]-'0');//将字符转换为数值
-			  int a2=(int)(charArray2[index2]-'0');
-			  sum=a1+a2+left;//将两个数相加，并加上进位
-			  if(sum>=10)//向上进位
-			  {
-				  left=1;
-			  }
-			  else{
-				  left=0;//不进位
-			  }
-			  /**
-			   * 将每次计算得到的结果放到data的前面
-			   */
-			  String temp=(sum%10)+data;
-			  data=temp;
-			  index2--;
-			  index1--;
-		}
-		/**
-		 * 继续计算较长那个串的值
-		 */
-		 while(index1>=0){
-			  int sum=0;
-			  int a1=(int)(charArray1[index1]-'0');
-			  sum=a1+left;
-			  if(sum>=10)
-			  {
-				  left=1;
-			  }
-			  else{
-				  left=0;
-			  }
-			  String temp1=(sum%10)+data;
-			  data=temp1;
-			  index1--;
-		 } 
-		 
-		 /**
-		  * 将最长的计算了之后，还需要把大于0的进位符加在结果的前面
-		  */
-		 if(left>0){
-			 String temp1=left+data;
-			 data=temp1;
-		 }
-		 return data;
+    String data="";//data用来存放最后计算的结果
+    String[] split = str.split("\\+");//按照+号将字符串分隔
+    if(split.length!=2){
+        System.out.println("输入有误");
+        return "输入有误 ，无返回值";
+    }
+    int index1=split[0].length()-1;//存第一个数组里面字符串的长度
+    int index2=split[1].length()-1;//存第二个数组里面字符串的长度
+    String str1=split[0];//将字符串拿出来转换为字符数组
+    char[] charArray1 = str1.toCharArray();
+    String str2=split[1];
+    char[] charArray2 = str2.toCharArray();
+    /**
+     * 始终让第一个字符串的长度大于等于第二个字符串
+     */
+    if(index1<index2){
+        int temp=index1;
+        index1=index2;
+        index2=temp;
+
+        char [] aa=charArray1;
+        charArray1=charArray2;
+        charArray2=aa;
+    }
+        int left=0;//这个标记用于向上进位，初始值为0
+        while(index2>=0){
+              int sum=0;//末尾两个数相加
+              int a1=(int)(charArray1[index2]-'0');//将字符转换为数值
+              int a2=(int)(charArray2[index2]-'0');
+              sum=a1+a2+left;//将两个数相加，并加上进位
+              if(sum>=10)//向上进位
+              {
+                  left=1;
+              }
+              else{
+                  left=0;//不进位
+              }
+              /**
+               * 将每次计算得到的结果放到data的前面
+               */
+              String temp=(sum%10)+data;
+              data=temp;
+              index2--;
+              index1--;
+        }
+        /**
+         * 继续计算较长那个串的值
+         */
+         while(index1>=0){
+              int sum=0;
+              int a1=(int)(charArray1[index1]-'0');
+              sum=a1+left;
+              if(sum>=10)
+              {
+                  left=1;
+              }
+              else{
+                  left=0;
+              }
+              String temp1=(sum%10)+data;
+              data=temp1;
+              index1--;
+         } 
+
+         /**
+          * 将最长的计算了之后，还需要把大于0的进位符加在结果的前面
+          */
+         if(left>0){
+             String temp1=left+data;
+             data=temp1;
+         }
+         return data;
 }
     public static void main(String[] args) {
-	    String string="99999999999999999999+1111111111111111111111111111111111111";
-	    System.out.println(calculate(string));
-	String string1="22222222222222222222222222+1111111233111111111";
-	     System.out.println(calculate(string1));
+        String string="99999999999999999999+1111111111111111111111111111111111111";
+        System.out.println(calculate(string));
+    String string1="22222222222222222222222222+1111111233111111111";
+         System.out.println(calculate(string1));
 }
 }
 ```
-
-
 
 ## 135、分发糖果
 
@@ -6897,8 +6428,6 @@ private static String calculate(String str) {
 每个孩子至少分配到 1 个糖果。
 相邻的孩子中，评分高的孩子必须获得更多的糖果。
 那么这样下来，老师至少需要准备多少颗糖果呢？
-
-
 
 示例 1:
 
@@ -6917,11 +6446,7 @@ private static String calculate(String str) {
      第三个孩子只得到 1 颗糖果，这已满足上述两个条件。
 ```
 
-
-
 **解析**
-
-
 
 **答案**
 
@@ -6951,7 +6476,7 @@ public int candy(int[] rating){
             sum += candy;
         }
     return sum;
-    
+
 }
 ```
 
@@ -6986,4 +6511,3 @@ public int candy3(int[] ratings) {
 ```java
 
 ```
-
